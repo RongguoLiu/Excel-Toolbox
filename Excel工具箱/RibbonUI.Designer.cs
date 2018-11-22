@@ -58,6 +58,7 @@
             this.groupMergeBooks = this.Factory.CreateRibbonGroup();
             this.mergebooks_RequireNewBook = this.Factory.CreateRibbonCheckBox();
             this.mergebooks_MergeAllSheets = this.Factory.CreateRibbonCheckBox();
+            this.mergebooks_AIO = this.Factory.CreateRibbonCheckBox();
             this.mergebooks_BeginMerge = this.Factory.CreateRibbonButton();
             this.groupMergeSheets = this.Factory.CreateRibbonGroup();
             this.mergesheets_HeadRowNum = this.Factory.CreateRibbonDropDown();
@@ -71,7 +72,6 @@
             this.dangerous_zone = this.Factory.CreateRibbonGroup();
             this.updateView = this.Factory.CreateRibbonCheckBox();
             this.showAlert = this.Factory.CreateRibbonCheckBox();
-            this.testBtn = this.Factory.CreateRibbonButton();
             this.group1 = this.Factory.CreateRibbonGroup();
             this.help_About = this.Factory.CreateRibbonButton();
             this.tab1.SuspendLayout();
@@ -97,6 +97,7 @@
             // 
             this.groupMergeBooks.Items.Add(this.mergebooks_RequireNewBook);
             this.groupMergeBooks.Items.Add(this.mergebooks_MergeAllSheets);
+            this.groupMergeBooks.Items.Add(this.mergebooks_AIO);
             this.groupMergeBooks.Items.Add(this.mergebooks_BeginMerge);
             this.groupMergeBooks.Label = "合并工作簿";
             this.groupMergeBooks.Name = "groupMergeBooks";
@@ -111,6 +112,12 @@
             // 
             this.mergebooks_MergeAllSheets.Label = "合并所有工作表";
             this.mergebooks_MergeAllSheets.Name = "mergebooks_MergeAllSheets";
+            // 
+            // mergebooks_AIO
+            // 
+            this.mergebooks_AIO.Label = "一体化操作流程";
+            this.mergebooks_AIO.Name = "mergebooks_AIO";
+            this.mergebooks_AIO.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.mergebooks_AIO_Click);
             // 
             // mergebooks_BeginMerge
             // 
@@ -230,7 +237,6 @@
             // 
             this.dangerous_zone.Items.Add(this.updateView);
             this.dangerous_zone.Items.Add(this.showAlert);
-            this.dangerous_zone.Items.Add(this.testBtn);
             this.dangerous_zone.Label = "危险区域";
             this.dangerous_zone.Name = "dangerous_zone";
             // 
@@ -247,15 +253,6 @@
             this.showAlert.Label = "显示警告";
             this.showAlert.Name = "showAlert";
             this.showAlert.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.showAlert_Click);
-            // 
-            // testBtn
-            // 
-            this.testBtn.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
-            this.testBtn.Label = "测试按钮";
-            this.testBtn.Name = "testBtn";
-            this.testBtn.OfficeImageId = "TableTestValidationRules";
-            this.testBtn.ShowImage = true;
-            this.testBtn.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.testBtn_Click);
             // 
             // group1
             // 
@@ -308,7 +305,6 @@
         internal Microsoft.Office.Tools.Ribbon.RibbonCheckBox mergebooks_RequireNewBook;
         internal Microsoft.Office.Tools.Ribbon.RibbonCheckBox mergebooks_MergeAllSheets;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton others_DeleteOtherSheets;
-        internal Microsoft.Office.Tools.Ribbon.RibbonButton testBtn;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton LookForFirstEmptyRow;
         internal Microsoft.Office.Tools.Ribbon.RibbonGroup dangerous_zone;
         internal Microsoft.Office.Tools.Ribbon.RibbonCheckBox updateView;
@@ -316,6 +312,7 @@
         internal Microsoft.Office.Tools.Ribbon.RibbonButton others_ClrClipboard;
         internal Microsoft.Office.Tools.Ribbon.RibbonGroup group1;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton help_About;
+        internal Microsoft.Office.Tools.Ribbon.RibbonCheckBox mergebooks_AIO;
     }
 
     partial class ThisRibbonCollection
