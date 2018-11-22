@@ -54,32 +54,53 @@
             Microsoft.Office.Tools.Ribbon.RibbonDropDownItem ribbonDropDownItemImpl18 = this.Factory.CreateRibbonDropDownItem();
             Microsoft.Office.Tools.Ribbon.RibbonDropDownItem ribbonDropDownItemImpl19 = this.Factory.CreateRibbonDropDownItem();
             Microsoft.Office.Tools.Ribbon.RibbonDropDownItem ribbonDropDownItemImpl20 = this.Factory.CreateRibbonDropDownItem();
+            Microsoft.Office.Tools.Ribbon.RibbonDropDownItem ribbonDropDownItemImpl21 = this.Factory.CreateRibbonDropDownItem();
+            Microsoft.Office.Tools.Ribbon.RibbonDropDownItem ribbonDropDownItemImpl22 = this.Factory.CreateRibbonDropDownItem();
+            Microsoft.Office.Tools.Ribbon.RibbonDropDownItem ribbonDropDownItemImpl23 = this.Factory.CreateRibbonDropDownItem();
+            Microsoft.Office.Tools.Ribbon.RibbonDropDownItem ribbonDropDownItemImpl24 = this.Factory.CreateRibbonDropDownItem();
+            Microsoft.Office.Tools.Ribbon.RibbonDropDownItem ribbonDropDownItemImpl25 = this.Factory.CreateRibbonDropDownItem();
+            Microsoft.Office.Tools.Ribbon.RibbonDropDownItem ribbonDropDownItemImpl26 = this.Factory.CreateRibbonDropDownItem();
+            Microsoft.Office.Tools.Ribbon.RibbonDropDownItem ribbonDropDownItemImpl27 = this.Factory.CreateRibbonDropDownItem();
+            Microsoft.Office.Tools.Ribbon.RibbonDropDownItem ribbonDropDownItemImpl28 = this.Factory.CreateRibbonDropDownItem();
+            Microsoft.Office.Tools.Ribbon.RibbonDropDownItem ribbonDropDownItemImpl29 = this.Factory.CreateRibbonDropDownItem();
+            Microsoft.Office.Tools.Ribbon.RibbonDropDownItem ribbonDropDownItemImpl30 = this.Factory.CreateRibbonDropDownItem();
+            Microsoft.Office.Tools.Ribbon.RibbonDropDownItem ribbonDropDownItemImpl31 = this.Factory.CreateRibbonDropDownItem();
+            Microsoft.Office.Tools.Ribbon.RibbonDropDownItem ribbonDropDownItemImpl32 = this.Factory.CreateRibbonDropDownItem();
             this.tab1 = this.Factory.CreateRibbonTab();
             this.groupMergeBooks = this.Factory.CreateRibbonGroup();
             this.mergebooks_RequireNewBook = this.Factory.CreateRibbonCheckBox();
             this.mergebooks_MergeAllSheets = this.Factory.CreateRibbonCheckBox();
             this.mergebooks_AIO = this.Factory.CreateRibbonCheckBox();
-            this.mergebooks_BeginMerge = this.Factory.CreateRibbonButton();
             this.groupMergeSheets = this.Factory.CreateRibbonGroup();
             this.mergesheets_HeadRowNum = this.Factory.CreateRibbonDropDown();
             this.mergesheets_contentRowNum = this.Factory.CreateRibbonDropDown();
             this.mergesheets_isFunctionEmbeded = this.Factory.CreateRibbonCheckBox();
-            this.mergesheets_BeginMerge = this.Factory.CreateRibbonButton();
+            this.convert = this.Factory.CreateRibbonGroup();
+            this.convert_sourceFormat = this.Factory.CreateRibbonDropDown();
+            this.convert_targetFormat = this.Factory.CreateRibbonDropDown();
+            this.buttonGroup1 = this.Factory.CreateRibbonButtonGroup();
             this.others = this.Factory.CreateRibbonGroup();
-            this.others_DeleteOtherSheets = this.Factory.CreateRibbonButton();
-            this.LookForFirstEmptyRow = this.Factory.CreateRibbonButton();
-            this.others_ClrClipboard = this.Factory.CreateRibbonButton();
             this.dangerous_zone = this.Factory.CreateRibbonGroup();
             this.updateView = this.Factory.CreateRibbonCheckBox();
             this.showAlert = this.Factory.CreateRibbonCheckBox();
-            this.group1 = this.Factory.CreateRibbonGroup();
+            this.support = this.Factory.CreateRibbonGroup();
+            this.mergebooks_BeginMerge = this.Factory.CreateRibbonButton();
+            this.mergesheets_BeginMerge = this.Factory.CreateRibbonButton();
+            this.convert_Exchange = this.Factory.CreateRibbonButton();
+            this.convert_Spreater = this.Factory.CreateRibbonButton();
+            this.convert_BeginConvert = this.Factory.CreateRibbonButton();
+            this.others_DeleteOtherSheets = this.Factory.CreateRibbonButton();
+            this.LookForFirstEmptyRow = this.Factory.CreateRibbonButton();
+            this.others_ClrClipboard = this.Factory.CreateRibbonButton();
             this.help_About = this.Factory.CreateRibbonButton();
             this.tab1.SuspendLayout();
             this.groupMergeBooks.SuspendLayout();
             this.groupMergeSheets.SuspendLayout();
+            this.convert.SuspendLayout();
+            this.buttonGroup1.SuspendLayout();
             this.others.SuspendLayout();
             this.dangerous_zone.SuspendLayout();
-            this.group1.SuspendLayout();
+            this.support.SuspendLayout();
             this.SuspendLayout();
             // 
             // tab1
@@ -87,9 +108,10 @@
             this.tab1.ControlId.ControlIdType = Microsoft.Office.Tools.Ribbon.RibbonControlIdType.Office;
             this.tab1.Groups.Add(this.groupMergeBooks);
             this.tab1.Groups.Add(this.groupMergeSheets);
+            this.tab1.Groups.Add(this.convert);
             this.tab1.Groups.Add(this.others);
             this.tab1.Groups.Add(this.dangerous_zone);
-            this.tab1.Groups.Add(this.group1);
+            this.tab1.Groups.Add(this.support);
             this.tab1.Label = "工具箱";
             this.tab1.Name = "tab1";
             // 
@@ -118,15 +140,6 @@
             this.mergebooks_AIO.Label = "一体化操作流程";
             this.mergebooks_AIO.Name = "mergebooks_AIO";
             this.mergebooks_AIO.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.mergebooks_AIO_Click);
-            // 
-            // mergebooks_BeginMerge
-            // 
-            this.mergebooks_BeginMerge.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
-            this.mergebooks_BeginMerge.Label = "开始合并";
-            this.mergebooks_BeginMerge.Name = "mergebooks_BeginMerge";
-            this.mergebooks_BeginMerge.OfficeImageId = "PivotExportToExcel";
-            this.mergebooks_BeginMerge.ShowImage = true;
-            this.mergebooks_BeginMerge.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.mergebooks_BeginMerge_Click);
             // 
             // groupMergeSheets
             // 
@@ -192,6 +205,105 @@
             this.mergesheets_isFunctionEmbeded.Label = "含公式或函数";
             this.mergesheets_isFunctionEmbeded.Name = "mergesheets_isFunctionEmbeded";
             // 
+            // convert
+            // 
+            this.convert.Items.Add(this.convert_sourceFormat);
+            this.convert.Items.Add(this.convert_targetFormat);
+            this.convert.Items.Add(this.buttonGroup1);
+            this.convert.Label = "group2";
+            this.convert.Name = "convert";
+            // 
+            // convert_sourceFormat
+            // 
+            ribbonDropDownItemImpl21.Label = "*.xlsx";
+            ribbonDropDownItemImpl22.Label = "*.xlsb";
+            ribbonDropDownItemImpl23.Label = "*.xlsm";
+            ribbonDropDownItemImpl24.Label = "*.xls";
+            ribbonDropDownItemImpl25.Label = "*.csv";
+            ribbonDropDownItemImpl26.Label = "*.*";
+            this.convert_sourceFormat.Items.Add(ribbonDropDownItemImpl21);
+            this.convert_sourceFormat.Items.Add(ribbonDropDownItemImpl22);
+            this.convert_sourceFormat.Items.Add(ribbonDropDownItemImpl23);
+            this.convert_sourceFormat.Items.Add(ribbonDropDownItemImpl24);
+            this.convert_sourceFormat.Items.Add(ribbonDropDownItemImpl25);
+            this.convert_sourceFormat.Items.Add(ribbonDropDownItemImpl26);
+            this.convert_sourceFormat.Label = "源格式";
+            this.convert_sourceFormat.Name = "convert_sourceFormat";
+            // 
+            // convert_targetFormat
+            // 
+            ribbonDropDownItemImpl27.Label = ".xlsx";
+            ribbonDropDownItemImpl27.OfficeImageId = "FileSaveAsExcelXlsx";
+            ribbonDropDownItemImpl28.Label = ".xlsb";
+            ribbonDropDownItemImpl28.OfficeImageId = "FileSaveAsExcelXlsb";
+            ribbonDropDownItemImpl29.Label = ".xlsm";
+            ribbonDropDownItemImpl29.OfficeImageId = "FileSaveAsExcelXlsxMacro";
+            ribbonDropDownItemImpl30.Label = ".xls";
+            ribbonDropDownItemImpl30.OfficeImageId = "FileSaveAsExcel97_2003";
+            ribbonDropDownItemImpl31.Label = ".csv";
+            ribbonDropDownItemImpl31.OfficeImageId = "CommaStyle";
+            ribbonDropDownItemImpl32.Label = ".pdf";
+            ribbonDropDownItemImpl32.OfficeImageId = "FileSaveAsPdfOrXps";
+            this.convert_targetFormat.Items.Add(ribbonDropDownItemImpl27);
+            this.convert_targetFormat.Items.Add(ribbonDropDownItemImpl28);
+            this.convert_targetFormat.Items.Add(ribbonDropDownItemImpl29);
+            this.convert_targetFormat.Items.Add(ribbonDropDownItemImpl30);
+            this.convert_targetFormat.Items.Add(ribbonDropDownItemImpl31);
+            this.convert_targetFormat.Items.Add(ribbonDropDownItemImpl32);
+            this.convert_targetFormat.Label = "目标格式";
+            this.convert_targetFormat.Name = "convert_targetFormat";
+            // 
+            // buttonGroup1
+            // 
+            this.buttonGroup1.Items.Add(this.convert_Exchange);
+            this.buttonGroup1.Items.Add(this.convert_Spreater);
+            this.buttonGroup1.Items.Add(this.convert_BeginConvert);
+            this.buttonGroup1.Name = "buttonGroup1";
+            // 
+            // others
+            // 
+            this.others.Items.Add(this.others_DeleteOtherSheets);
+            this.others.Items.Add(this.LookForFirstEmptyRow);
+            this.others.Items.Add(this.others_ClrClipboard);
+            this.others.Label = "闲杂工具";
+            this.others.Name = "others";
+            // 
+            // dangerous_zone
+            // 
+            this.dangerous_zone.Items.Add(this.updateView);
+            this.dangerous_zone.Items.Add(this.showAlert);
+            this.dangerous_zone.Label = "危险区域";
+            this.dangerous_zone.Name = "dangerous_zone";
+            // 
+            // updateView
+            // 
+            this.updateView.Checked = true;
+            this.updateView.Label = "更新视图";
+            this.updateView.Name = "updateView";
+            this.updateView.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.updateView_Click);
+            // 
+            // showAlert
+            // 
+            this.showAlert.Checked = true;
+            this.showAlert.Label = "显示警告";
+            this.showAlert.Name = "showAlert";
+            this.showAlert.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.showAlert_Click);
+            // 
+            // support
+            // 
+            this.support.Items.Add(this.help_About);
+            this.support.Label = "帮助和反馈";
+            this.support.Name = "support";
+            // 
+            // mergebooks_BeginMerge
+            // 
+            this.mergebooks_BeginMerge.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
+            this.mergebooks_BeginMerge.Label = "开始合并";
+            this.mergebooks_BeginMerge.Name = "mergebooks_BeginMerge";
+            this.mergebooks_BeginMerge.OfficeImageId = "PivotExportToExcel";
+            this.mergebooks_BeginMerge.ShowImage = true;
+            this.mergebooks_BeginMerge.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.mergebooks_BeginMerge_Click);
+            // 
             // mergesheets_BeginMerge
             // 
             this.mergesheets_BeginMerge.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
@@ -201,13 +313,27 @@
             this.mergesheets_BeginMerge.ShowImage = true;
             this.mergesheets_BeginMerge.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.mergesheets_BeginMerge_Click);
             // 
-            // others
+            // convert_Exchange
             // 
-            this.others.Items.Add(this.others_DeleteOtherSheets);
-            this.others.Items.Add(this.LookForFirstEmptyRow);
-            this.others.Items.Add(this.others_ClrClipboard);
-            this.others.Label = "闲杂工具";
-            this.others.Name = "others";
+            this.convert_Exchange.Label = "交换";
+            this.convert_Exchange.Name = "convert_Exchange";
+            this.convert_Exchange.OfficeImageId = "TabOrder";
+            this.convert_Exchange.ShowImage = true;
+            this.convert_Exchange.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.convert_Exchange_Click);
+            // 
+            // convert_Spreater
+            // 
+            this.convert_Spreater.Enabled = false;
+            this.convert_Spreater.Label = "　 ";
+            this.convert_Spreater.Name = "convert_Spreater";
+            // 
+            // convert_BeginConvert
+            // 
+            this.convert_BeginConvert.Label = "开始转换";
+            this.convert_BeginConvert.Name = "convert_BeginConvert";
+            this.convert_BeginConvert.OfficeImageId = "FileSaveAsOtherFormats";
+            this.convert_BeginConvert.ShowImage = true;
+            this.convert_BeginConvert.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.convert_BeginConvert_Click);
             // 
             // others_DeleteOtherSheets
             // 
@@ -233,33 +359,6 @@
             this.others_ClrClipboard.ShowImage = true;
             this.others_ClrClipboard.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.others_ClrClipboard_Click);
             // 
-            // dangerous_zone
-            // 
-            this.dangerous_zone.Items.Add(this.updateView);
-            this.dangerous_zone.Items.Add(this.showAlert);
-            this.dangerous_zone.Label = "危险区域";
-            this.dangerous_zone.Name = "dangerous_zone";
-            // 
-            // updateView
-            // 
-            this.updateView.Checked = true;
-            this.updateView.Label = "更新视图";
-            this.updateView.Name = "updateView";
-            this.updateView.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.updateView_Click);
-            // 
-            // showAlert
-            // 
-            this.showAlert.Checked = true;
-            this.showAlert.Label = "显示警告";
-            this.showAlert.Name = "showAlert";
-            this.showAlert.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.showAlert_Click);
-            // 
-            // group1
-            // 
-            this.group1.Items.Add(this.help_About);
-            this.group1.Label = "帮助和反馈";
-            this.group1.Name = "group1";
-            // 
             // help_About
             // 
             this.help_About.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
@@ -281,12 +380,16 @@
             this.groupMergeBooks.PerformLayout();
             this.groupMergeSheets.ResumeLayout(false);
             this.groupMergeSheets.PerformLayout();
+            this.convert.ResumeLayout(false);
+            this.convert.PerformLayout();
+            this.buttonGroup1.ResumeLayout(false);
+            this.buttonGroup1.PerformLayout();
             this.others.ResumeLayout(false);
             this.others.PerformLayout();
             this.dangerous_zone.ResumeLayout(false);
             this.dangerous_zone.PerformLayout();
-            this.group1.ResumeLayout(false);
-            this.group1.PerformLayout();
+            this.support.ResumeLayout(false);
+            this.support.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -310,9 +413,16 @@
         internal Microsoft.Office.Tools.Ribbon.RibbonCheckBox updateView;
         internal Microsoft.Office.Tools.Ribbon.RibbonCheckBox showAlert;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton others_ClrClipboard;
-        internal Microsoft.Office.Tools.Ribbon.RibbonGroup group1;
+        internal Microsoft.Office.Tools.Ribbon.RibbonGroup support;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton help_About;
         internal Microsoft.Office.Tools.Ribbon.RibbonCheckBox mergebooks_AIO;
+        internal Microsoft.Office.Tools.Ribbon.RibbonGroup convert;
+        internal Microsoft.Office.Tools.Ribbon.RibbonDropDown convert_sourceFormat;
+        internal Microsoft.Office.Tools.Ribbon.RibbonDropDown convert_targetFormat;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton convert_BeginConvert;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButtonGroup buttonGroup1;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton convert_Exchange;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton convert_Spreater;
     }
 
     partial class ThisRibbonCollection

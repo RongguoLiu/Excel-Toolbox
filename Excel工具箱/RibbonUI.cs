@@ -17,7 +17,11 @@ namespace Excel工具箱
         {
             mergesheets_HeadRowNum.SelectedItemIndex = 1;
             mergesheets_contentRowNum.SelectedItemIndex = 1;
+            convert_sourceFormat.SelectedItemIndex = 3;
+            convert_targetFormat.SelectedItemIndex = 0;
         }
+        //Consts
+        const string FileFitterForMerge = "Microsoft Excel文件(*.xlsx),*.xlsx,Excel 97-2003 工作簿(*.xls),*xls,CSV(逗号分隔)(*.csv),*.csv";
         //Button Handlers
         private void mergebooks_BeginMerge_Click(object sender, RibbonControlEventArgs e)
         {
@@ -27,6 +31,33 @@ namespace Excel工具箱
         {
             if (mergebooks_AIO.Checked) MergeSheetsInBooks();
             else MergeSheets();
+        }
+        private void convert_Exchange_Click(object sender, RibbonControlEventArgs e)
+        {
+            if(convert_sourceFormat.SelectedItemIndex!=5 && convert_targetFormat.SelectedItemIndex != 5)
+            {
+                int temp = convert_sourceFormat.SelectedItemIndex;
+                convert_sourceFormat.SelectedItemIndex = convert_targetFormat.SelectedItemIndex;
+                convert_targetFormat.SelectedItemIndex = temp;
+            }
+        }
+        private void convert_BeginConvert_Click(object sender, RibbonControlEventArgs e)
+        {
+            Excel.Workbook WorkbookToConvert;
+            object FileOpen = Globals.ThisAddIn.Application.GetOpenFilename(FileFilter: (convert_sourceFormat.SelectedItem.Label + "," + convert_sourceFormat.SelectedItem.Label), MultiSelect: true, Title: "请选择需要转换的工作簿");
+            if (FileOpen.GetType() == typeof(bool)) return;
+            int ConvertNum = ((System.Collections.IList)FileOpen).Count;
+            Globals.ThisAddIn.Application.ScreenUpdating = false;
+            Globals.ThisAddIn.Application.DisplayAlerts = false;
+            for (int counter = 1; counter <= ConvertNum; counter++)
+            {
+                WorkbookToConvert = Globals.ThisAddIn.Application.Workbooks.Open(Filename: (string)((System.Collections.IList)FileOpen)[counter]);
+                ConvertWorkbookFormat(WorkbookToConvert);
+                WorkbookToConvert.Close();
+            }
+            Globals.ThisAddIn.Application.ScreenUpdating = true;
+            Globals.ThisAddIn.Application.DisplayAlerts = true;
+            MessageBox.Show("转换完成");
         }
         private void others_DeleteOtherSheets_Click(object sender, RibbonControlEventArgs e)
         {
@@ -63,7 +94,7 @@ namespace Excel工具箱
             //AboutBox aboutBox = new AboutBox();
             //aboutBox.Show();
         }
-        //Checkbox Handlers
+        //Checkbox & Dropdowns Handlers
         private void mergebooks_AIO_Click(object sender, RibbonControlEventArgs e)
         {
             if (mergebooks_AIO.Checked)
@@ -101,7 +132,7 @@ namespace Excel工具箱
             Excel.Workbook destWorkbook, sourceWorkbook;
             int currentSheetIndex = 1;
             int MergeNum;
-            object FileOpen = Globals.ThisAddIn.Application.GetOpenFilename(FileFilter: "Excel 97-2003 工作簿(*.xls),*xls,Microsoft Excel文件(*.xlsx),*.xlsx", MultiSelect: true, Title: "请选择需要合并的工作簿");
+            object FileOpen = Globals.ThisAddIn.Application.GetOpenFilename(FileFilter: FileFitterForMerge, MultiSelect: true, Title: "请选择需要合并的工作簿");
             if (FileOpen.GetType() == typeof(bool)) return;
             MergeNum = ((System.Collections.IList)FileOpen).Count;
             try
@@ -117,8 +148,7 @@ namespace Excel工具箱
             Globals.ThisAddIn.Application.ScreenUpdating = false;
             for (int counter = 1; counter <= MergeNum; counter++)
             {
-                sourceWorkbook = Globals.ThisAddIn.Application.Workbooks.Open
-                    (Filename: (string)((System.Collections.IList)FileOpen)[counter]);
+                sourceWorkbook = Globals.ThisAddIn.Application.Workbooks.Open(Filename: (string)((System.Collections.IList)FileOpen)[counter]);
                 foreach (Excel.Worksheet sourceWorksheet in sourceWorkbook.Worksheets)
                 {
                     if (mergebooks_MergeAllSheets.Checked == false && sourceWorksheet.Index > 1) break;
@@ -146,8 +176,9 @@ namespace Excel工具箱
             }
             catch
             {
-                Random random = new Random();
-                destWorksheet.Name = "Merge" + random.Next(1, 10000).ToString();
+                destWorksheet.Delete();
+                MessageBox.Show("确保工作簿中没有以'Merge'为名的工作表，再试一次");
+                return;
             }
             Globals.ThisAddIn.Application.ScreenUpdating = false;
             if (mergesheets_contentRowNum.SelectedItemIndex != 0)
@@ -198,7 +229,7 @@ namespace Excel工具箱
         {
             Excel.Workbook destWorkbook, sourceWorkbook;
             Excel.Worksheet destWorksheet;
-            object FileOpen = Globals.ThisAddIn.Application.GetOpenFilename(FileFilter: "Excel 97-2003 工作簿(*.xls),*xls,Microsoft Excel文件(*.xlsx),*.xlsx", MultiSelect: true, Title: "请选择需要合并的工作簿");
+            object FileOpen = Globals.ThisAddIn.Application.GetOpenFilename(FileFilter: FileFitterForMerge, MultiSelect: true, Title: "请选择需要合并的工作簿");
             if (FileOpen.GetType() == typeof(bool)) return;
             int MergeNum = ((System.Collections.IList)FileOpen).Count;
             destWorkbook = Globals.ThisAddIn.Application.Workbooks.Add();
@@ -234,6 +265,32 @@ namespace Excel工具箱
 
             }
             else source.Copy(dest);
+        }
+        private void ConvertWorkbookFormat(Excel.Workbook workbook)
+        {
+            //MessageBox.Show(((int)workbook.FileFormat).ToString());
+            //return;
+            int FormatType = FormatCode(convert_targetFormat.SelectedItemIndex);
+            if (FormatType != 0) workbook.SaveAs(workbook.Name + convert_targetFormat.SelectedItem.Label, (XlFileFormat)FormatType, ConflictResolution: XlSaveConflictResolution.xlLocalSessionChanges);
+            else workbook.ExportAsFixedFormat(XlFixedFormatType.xlTypePDF, workbook.Name + convert_targetFormat.SelectedItem.Label);
+        }
+        private int FormatCode(int code)
+        {
+            switch (code)
+            {
+                case 0:
+                    return 51;
+                case 1:
+                    return 50;
+                case 2:
+                    return 52;
+                case 3:
+                    return 56;
+                case 4:
+                    return 6;
+                default:
+                    return 0;
+            }
         }
         private int FirstEmptyRowOf(Excel.Worksheet testSheet, int testCellsNumEachRow)
         {
