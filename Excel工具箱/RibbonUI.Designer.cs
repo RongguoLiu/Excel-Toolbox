@@ -87,12 +87,12 @@
             this.mergebooks_BeginMerge = this.Factory.CreateRibbonButton();
             this.mergesheets_BeginMerge = this.Factory.CreateRibbonButton();
             this.convert_Exchange = this.Factory.CreateRibbonButton();
-            this.convert_Spreater = this.Factory.CreateRibbonButton();
             this.convert_BeginConvert = this.Factory.CreateRibbonButton();
             this.others_DeleteOtherSheets = this.Factory.CreateRibbonButton();
             this.LookForFirstEmptyRow = this.Factory.CreateRibbonButton();
             this.others_ClrClipboard = this.Factory.CreateRibbonButton();
             this.help_About = this.Factory.CreateRibbonButton();
+            this.convert_Spreater = this.Factory.CreateRibbonButton();
             this.tab1.SuspendLayout();
             this.groupMergeBooks.SuspendLayout();
             this.groupMergeSheets.SuspendLayout();
@@ -210,7 +210,7 @@
             this.convert.Items.Add(this.convert_sourceFormat);
             this.convert.Items.Add(this.convert_targetFormat);
             this.convert.Items.Add(this.buttonGroup1);
-            this.convert.Label = "group2";
+            this.convert.Label = "工作簿格式转换";
             this.convert.Name = "convert";
             // 
             // convert_sourceFormat
@@ -229,6 +229,7 @@
             this.convert_sourceFormat.Items.Add(ribbonDropDownItemImpl26);
             this.convert_sourceFormat.Label = "源格式";
             this.convert_sourceFormat.Name = "convert_sourceFormat";
+            this.convert_sourceFormat.SelectionChanged += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.convert_sourceFormat_SelectionChanged);
             // 
             // convert_targetFormat
             // 
@@ -252,6 +253,7 @@
             this.convert_targetFormat.Items.Add(ribbonDropDownItemImpl32);
             this.convert_targetFormat.Label = "目标格式";
             this.convert_targetFormat.Name = "convert_targetFormat";
+            this.convert_targetFormat.SelectionChanged += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.convert_targetFormat_SelectionChanged);
             // 
             // buttonGroup1
             // 
@@ -321,12 +323,6 @@
             this.convert_Exchange.ShowImage = true;
             this.convert_Exchange.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.convert_Exchange_Click);
             // 
-            // convert_Spreater
-            // 
-            this.convert_Spreater.Enabled = false;
-            this.convert_Spreater.Label = "　 ";
-            this.convert_Spreater.Name = "convert_Spreater";
-            // 
             // convert_BeginConvert
             // 
             this.convert_BeginConvert.Label = "开始转换";
@@ -367,6 +363,12 @@
             this.help_About.OfficeImageId = "Info";
             this.help_About.ShowImage = true;
             this.help_About.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.help_About_Click);
+            // 
+            // convert_Spreater
+            // 
+            this.convert_Spreater.Enabled = false;
+            this.convert_Spreater.Label = "　 ";
+            this.convert_Spreater.Name = "convert_Spreater";
             // 
             // Ribbon1
             // 

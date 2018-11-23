@@ -34,12 +34,9 @@ namespace Excel工具箱
         }
         private void convert_Exchange_Click(object sender, RibbonControlEventArgs e)
         {
-            if(convert_sourceFormat.SelectedItemIndex!=5 && convert_targetFormat.SelectedItemIndex != 5)
-            {
-                int temp = convert_sourceFormat.SelectedItemIndex;
-                convert_sourceFormat.SelectedItemIndex = convert_targetFormat.SelectedItemIndex;
-                convert_targetFormat.SelectedItemIndex = temp;
-            }
+            int temp = convert_sourceFormat.SelectedItemIndex;
+            convert_sourceFormat.SelectedItemIndex = convert_targetFormat.SelectedItemIndex;
+            convert_targetFormat.SelectedItemIndex = temp;
         }
         private void convert_BeginConvert_Click(object sender, RibbonControlEventArgs e)
         {
@@ -51,9 +48,17 @@ namespace Excel工具箱
             Globals.ThisAddIn.Application.DisplayAlerts = false;
             for (int counter = 1; counter <= ConvertNum; counter++)
             {
-                WorkbookToConvert = Globals.ThisAddIn.Application.Workbooks.Open(Filename: (string)((System.Collections.IList)FileOpen)[counter]);
-                ConvertWorkbookFormat(WorkbookToConvert);
-                WorkbookToConvert.Close();
+                try
+                {
+                    WorkbookToConvert = Globals.ThisAddIn.Application.Workbooks.Open(Filename: (string)((System.Collections.IList)FileOpen)[counter]);
+                    ConvertWorkbookFormat(WorkbookToConvert);
+                    WorkbookToConvert.Close();
+                }
+                catch
+                {
+                    MessageBox.Show("出现了错误，文件名："+ (string)((System.Collections.IList)FileOpen)[counter]);
+                    continue;
+                }
             }
             Globals.ThisAddIn.Application.ScreenUpdating = true;
             Globals.ThisAddIn.Application.DisplayAlerts = true;
@@ -126,6 +131,20 @@ namespace Excel工具箱
             if (showAlert.Checked) Globals.ThisAddIn.Application.DisplayAlerts = true;
             else Globals.ThisAddIn.Application.DisplayAlerts = false;
         }
+        private void disableConvertExchangeButton()
+        {
+            if (convert_sourceFormat.SelectedItemIndex == 5 || convert_targetFormat.SelectedItemIndex == 5) convert_Exchange.Enabled = false;
+            else convert_Exchange.Enabled = true;
+        }
+        private void convert_sourceFormat_SelectionChanged(object sender, RibbonControlEventArgs e)
+        {
+            disableConvertExchangeButton();
+        }
+        private void convert_targetFormat_SelectionChanged(object sender, RibbonControlEventArgs e)
+        {
+            disableConvertExchangeButton();
+        }
+
         //Workers
         private void MergeBooks()
         {
