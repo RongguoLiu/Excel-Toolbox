@@ -81,18 +81,19 @@
             this.buttonGroup1 = this.Factory.CreateRibbonButtonGroup();
             this.others = this.Factory.CreateRibbonGroup();
             this.dangerous_zone = this.Factory.CreateRibbonGroup();
-            this.updateView = this.Factory.CreateRibbonCheckBox();
-            this.showAlert = this.Factory.CreateRibbonCheckBox();
+            this.dangerzone_updateView = this.Factory.CreateRibbonCheckBox();
+            this.dangerzone_showAlert = this.Factory.CreateRibbonCheckBox();
             this.support = this.Factory.CreateRibbonGroup();
             this.mergebooks_BeginMerge = this.Factory.CreateRibbonButton();
             this.mergesheets_BeginMerge = this.Factory.CreateRibbonButton();
             this.convert_Exchange = this.Factory.CreateRibbonButton();
+            this.convert_Spreater = this.Factory.CreateRibbonButton();
             this.convert_BeginConvert = this.Factory.CreateRibbonButton();
             this.others_DeleteOtherSheets = this.Factory.CreateRibbonButton();
             this.LookForFirstEmptyRow = this.Factory.CreateRibbonButton();
             this.others_ClrClipboard = this.Factory.CreateRibbonButton();
             this.help_About = this.Factory.CreateRibbonButton();
-            this.convert_Spreater = this.Factory.CreateRibbonButton();
+            this.dangerzone_tryFix = this.Factory.CreateRibbonButton();
             this.tab1.SuspendLayout();
             this.groupMergeBooks.SuspendLayout();
             this.groupMergeSheets.SuspendLayout();
@@ -272,24 +273,25 @@
             // 
             // dangerous_zone
             // 
-            this.dangerous_zone.Items.Add(this.updateView);
-            this.dangerous_zone.Items.Add(this.showAlert);
+            this.dangerous_zone.Items.Add(this.dangerzone_updateView);
+            this.dangerous_zone.Items.Add(this.dangerzone_showAlert);
+            this.dangerous_zone.Items.Add(this.dangerzone_tryFix);
             this.dangerous_zone.Label = "危险区域";
             this.dangerous_zone.Name = "dangerous_zone";
             // 
-            // updateView
+            // dangerzone_updateView
             // 
-            this.updateView.Checked = true;
-            this.updateView.Label = "更新视图";
-            this.updateView.Name = "updateView";
-            this.updateView.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.updateView_Click);
+            this.dangerzone_updateView.Checked = true;
+            this.dangerzone_updateView.Label = "更新视图";
+            this.dangerzone_updateView.Name = "dangerzone_updateView";
+            this.dangerzone_updateView.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.updateView_Click);
             // 
-            // showAlert
+            // dangerzone_showAlert
             // 
-            this.showAlert.Checked = true;
-            this.showAlert.Label = "显示警告";
-            this.showAlert.Name = "showAlert";
-            this.showAlert.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.showAlert_Click);
+            this.dangerzone_showAlert.Checked = true;
+            this.dangerzone_showAlert.Label = "显示警告";
+            this.dangerzone_showAlert.Name = "dangerzone_showAlert";
+            this.dangerzone_showAlert.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.showAlert_Click);
             // 
             // support
             // 
@@ -322,6 +324,12 @@
             this.convert_Exchange.OfficeImageId = "TabOrder";
             this.convert_Exchange.ShowImage = true;
             this.convert_Exchange.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.convert_Exchange_Click);
+            // 
+            // convert_Spreater
+            // 
+            this.convert_Spreater.Enabled = false;
+            this.convert_Spreater.Label = "　 ";
+            this.convert_Spreater.Name = "convert_Spreater";
             // 
             // convert_BeginConvert
             // 
@@ -358,17 +366,20 @@
             // help_About
             // 
             this.help_About.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
-            this.help_About.Label = "关于和 bug反馈";
+            this.help_About.Label = "帮助和 bug反馈";
             this.help_About.Name = "help_About";
             this.help_About.OfficeImageId = "Info";
             this.help_About.ShowImage = true;
+            this.help_About.Visible = false;
             this.help_About.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.help_About_Click);
             // 
-            // convert_Spreater
+            // dangerzone_tryFix
             // 
-            this.convert_Spreater.Enabled = false;
-            this.convert_Spreater.Label = "　 ";
-            this.convert_Spreater.Name = "convert_Spreater";
+            this.dangerzone_tryFix.Label = "修复视图问题";
+            this.dangerzone_tryFix.Name = "dangerzone_tryFix";
+            this.dangerzone_tryFix.OfficeImageId = "TableOfContentsUpdate";
+            this.dangerzone_tryFix.ShowImage = true;
+            this.dangerzone_tryFix.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.dangerzone_tryFix_Click);
             // 
             // Ribbon1
             // 
@@ -412,8 +423,8 @@
         internal Microsoft.Office.Tools.Ribbon.RibbonButton others_DeleteOtherSheets;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton LookForFirstEmptyRow;
         internal Microsoft.Office.Tools.Ribbon.RibbonGroup dangerous_zone;
-        internal Microsoft.Office.Tools.Ribbon.RibbonCheckBox updateView;
-        internal Microsoft.Office.Tools.Ribbon.RibbonCheckBox showAlert;
+        internal Microsoft.Office.Tools.Ribbon.RibbonCheckBox dangerzone_updateView;
+        internal Microsoft.Office.Tools.Ribbon.RibbonCheckBox dangerzone_showAlert;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton others_ClrClipboard;
         internal Microsoft.Office.Tools.Ribbon.RibbonGroup support;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton help_About;
@@ -425,6 +436,7 @@
         internal Microsoft.Office.Tools.Ribbon.RibbonButtonGroup buttonGroup1;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton convert_Exchange;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton convert_Spreater;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton dangerzone_tryFix;
     }
 
     partial class ThisRibbonCollection
