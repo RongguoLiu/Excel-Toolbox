@@ -93,6 +93,11 @@ namespace Excel工具箱
         {
             Globals.ThisAddIn.Application.ActiveSheet.Rows[FirstEmptyRowOf(Globals.ThisAddIn.Application.ActiveSheet, 10)].Select();
         }
+        private void dangerzone_tryFix_Click(object sender, RibbonControlEventArgs e)
+        {
+            Globals.ThisAddIn.Application.ScreenUpdating = true;
+            Globals.ThisAddIn.Application.DisplayAlerts = true;
+        }
         private void help_About_Click(object sender, RibbonControlEventArgs e)
         {
             //todo:Draw a about box...
@@ -107,28 +112,21 @@ namespace Excel工具箱
                 mergebooks_RequireNewBook.Checked = true;
                 mergebooks_RequireNewBook.Enabled = false;
                 mergebooks_BeginMerge.Enabled = false;
-                mergesheets_contentRowNum.SelectedItemIndex = 0;
-                mergesheets_contentRowNum.Enabled = false;
-                mergesheets_isFunctionEmbeded.Checked = false;
-                mergesheets_isFunctionEmbeded.Enabled = false;
             }
             else
             {
                 mergebooks_RequireNewBook.Enabled = true;
                 mergebooks_BeginMerge.Enabled = true;
-                mergesheets_contentRowNum.SelectedItemIndex = 1;
-                mergesheets_contentRowNum.Enabled = true;
-                mergesheets_isFunctionEmbeded.Enabled = true;
             }
         }
         private void updateView_Click(object sender, RibbonControlEventArgs e)
         {
-            if (updateView.Checked) Globals.ThisAddIn.Application.ScreenUpdating = true;
+            if (dangerzone_updateView.Checked) Globals.ThisAddIn.Application.ScreenUpdating = true;
             else Globals.ThisAddIn.Application.ScreenUpdating = false;
         }
         private void showAlert_Click(object sender, RibbonControlEventArgs e)
         {
-            if (showAlert.Checked) Globals.ThisAddIn.Application.DisplayAlerts = true;
+            if (dangerzone_showAlert.Checked) Globals.ThisAddIn.Application.DisplayAlerts = true;
             else Globals.ThisAddIn.Application.DisplayAlerts = false;
         }
         private void disableConvertExchangeButton()
@@ -144,7 +142,6 @@ namespace Excel工具箱
         {
             disableConvertExchangeButton();
         }
-
         //Workers
         private void MergeBooks()
         {
@@ -235,6 +232,7 @@ namespace Excel工具箱
                 for (int CurrentSheetIndex = 2; CurrentSheetIndex <= Globals.ThisAddIn.Application.ActiveWorkbook.Worksheets.Count; CurrentSheetIndex++)
                 {
                     CopyRowEnd = FirstEmptyRowOf(sourceWorkbook.Worksheets[CurrentSheetIndex], 10) - 1;
+                    if (CopyRowEnd <= CopyRowBegin) continue;
                     RowCP(sourceWorkbook.Sheets[CurrentSheetIndex].Rows[CopyRowBegin.ToString() + ":" + CopyRowEnd.ToString()], destWorksheet.Rows[CurrentRowIndex], mergesheets_isFunctionEmbeded.Checked);
                     CurrentRowIndex = CurrentRowIndex + 1 + CopyRowEnd - CopyRowBegin;
                 }
@@ -258,18 +256,39 @@ namespace Excel工具箱
             HeadRowNum = mergesheets_HeadRowNum.SelectedItemIndex;
             CurrentRowIndex = CopyRowBegin = HeadRowNum + 1;
             Globals.ThisAddIn.Application.ScreenUpdating = false;
-            for (int counter = 1; counter <= MergeNum; counter++)
+            if (mergesheets_contentRowNum.SelectedItemIndex != 0)
             {
-                sourceWorkbook = Globals.ThisAddIn.Application.Workbooks.Open(Filename: (string)((System.Collections.IList)FileOpen)[counter]);
-                if (counter == 1 && mergesheets_HeadRowNum.SelectedItemIndex != 0) RowCP(sourceWorkbook.Sheets[1].Rows["1:" + mergesheets_HeadRowNum.SelectedItemIndex.ToString()], destWorksheet.Rows[1], false);
-                foreach (Excel.Worksheet sourceWorksheet in sourceWorkbook.Worksheets)
+                int CopyRowNum = mergesheets_contentRowNum.SelectedItemIndex;
+                CopyRowEnd = HeadRowNum + CopyRowNum;
+                for (int counter = 1; counter <= MergeNum; counter++)
                 {
-                    if (mergebooks_MergeAllSheets.Checked == false && sourceWorksheet.Index > 1) break;
-                    CopyRowEnd = FirstEmptyRowOf(sourceWorksheet, 10) - 1;
-                    RowCP(sourceWorksheet.Rows[CopyRowBegin.ToString() + ":" + CopyRowEnd.ToString()], destWorksheet.Rows[CurrentRowIndex], mergesheets_isFunctionEmbeded.Checked);
-                    CurrentRowIndex = CurrentRowIndex + 1 + CopyRowEnd - CopyRowBegin;
+                    sourceWorkbook = Globals.ThisAddIn.Application.Workbooks.Open(Filename: (string)((System.Collections.IList)FileOpen)[counter]);
+                    if (counter == 1 && mergesheets_HeadRowNum.SelectedItemIndex != 0) RowCP(sourceWorkbook.Sheets[1].Rows["1:" + mergesheets_HeadRowNum.SelectedItemIndex.ToString()], destWorksheet.Rows[1], mergesheets_isFunctionEmbeded.Checked);
+                    foreach (Excel.Worksheet sourceWorksheet in sourceWorkbook.Worksheets)
+                    {
+                        if (mergebooks_MergeAllSheets.Checked == false && sourceWorksheet.Index > 1) break;
+                        RowCP(sourceWorksheet.Rows[CopyRowBegin.ToString() + ":" + CopyRowEnd.ToString()], destWorksheet.Rows[CurrentRowIndex], mergesheets_isFunctionEmbeded.Checked);
+                        CurrentRowIndex = CurrentRowIndex + 1 + CopyRowEnd - CopyRowBegin;
+                    }
+                    sourceWorkbook.Close();
                 }
-                sourceWorkbook.Close();
+            }
+            if (mergesheets_contentRowNum.SelectedItemIndex == 0)
+            {
+                for (int counter = 1; counter <= MergeNum; counter++)
+                {
+                    sourceWorkbook = Globals.ThisAddIn.Application.Workbooks.Open(Filename: (string)((System.Collections.IList)FileOpen)[counter]);
+                    if (counter == 1 && mergesheets_HeadRowNum.SelectedItemIndex != 0) RowCP(sourceWorkbook.Sheets[1].Rows["1:" + mergesheets_HeadRowNum.SelectedItemIndex.ToString()], destWorksheet.Rows[1], mergesheets_isFunctionEmbeded.Checked);
+                    foreach (Excel.Worksheet sourceWorksheet in sourceWorkbook.Worksheets)
+                    {
+                        if (mergebooks_MergeAllSheets.Checked == false && sourceWorksheet.Index > 1) break;
+                        CopyRowEnd = FirstEmptyRowOf(sourceWorksheet, 10) - 1;
+                        if (CopyRowEnd <= CopyRowBegin) continue;
+                        RowCP(sourceWorksheet.Rows[CopyRowBegin.ToString() + ":" + CopyRowEnd.ToString()], destWorksheet.Rows[CurrentRowIndex], mergesheets_isFunctionEmbeded.Checked);
+                        CurrentRowIndex = CurrentRowIndex + 1 + CopyRowEnd - CopyRowBegin;
+                    }
+                    sourceWorkbook.Close();
+                }
             }
             destWorksheet.Cells[1].Select();
             Globals.ThisAddIn.Application.ScreenUpdating = true;
