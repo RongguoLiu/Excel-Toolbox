@@ -1,5 +1,5 @@
 # Excel-Toolbox
-A Ribbon UI Excel Add-in
+一个正在成长的Excel工具集，用于提高生活幸福度。
 
 ## 屏幕截图
 
@@ -11,6 +11,6 @@ A Ribbon UI Excel Add-in
 
 * 要么用第三方软件解压
 
-* 要么 `.zip-属性-勾选“解除锁定”-确定` 后，用Windows Explorer解压
+* 要么 `.zip-属性-勾选“解除锁定”-确定` ，再用Windows Explorer解压
 
-再运行 `setup.exe` ，否则，很可能遭遇错误
+然后运行 `setup.exe` ，否则，很可能遭遇错误……
