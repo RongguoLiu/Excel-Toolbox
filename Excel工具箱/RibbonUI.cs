@@ -217,7 +217,6 @@ namespace Excel工具箱
                 }
                 destWorksheet.Cells[1].Select();
             }
-
             if (mergesheets_contentRowNum.SelectedItemIndex == 0)
             {
                 int HeadRowNum, CopyRowBegin, CopyRowEnd, CurrentRowIndex;
@@ -232,7 +231,7 @@ namespace Excel工具箱
                 for (int CurrentSheetIndex = 2; CurrentSheetIndex <= Globals.ThisAddIn.Application.ActiveWorkbook.Worksheets.Count; CurrentSheetIndex++)
                 {
                     CopyRowEnd = FirstEmptyRowOf(sourceWorkbook.Worksheets[CurrentSheetIndex], 10) - 1;
-                    if (CopyRowEnd <= CopyRowBegin) continue;
+                    if (CopyRowEnd < CopyRowBegin) continue;
                     RowCP(sourceWorkbook.Sheets[CurrentSheetIndex].Rows[CopyRowBegin.ToString() + ":" + CopyRowEnd.ToString()], destWorksheet.Rows[CurrentRowIndex], mergesheets_isFunctionEmbeded.Checked);
                     CurrentRowIndex = CurrentRowIndex + 1 + CopyRowEnd - CopyRowBegin;
                 }
@@ -283,7 +282,7 @@ namespace Excel工具箱
                     {
                         if (mergebooks_MergeAllSheets.Checked == false && sourceWorksheet.Index > 1) break;
                         CopyRowEnd = FirstEmptyRowOf(sourceWorksheet, 10) - 1;
-                        if (CopyRowEnd <= CopyRowBegin) continue;
+                        if (CopyRowEnd < CopyRowBegin) continue;
                         RowCP(sourceWorksheet.Rows[CopyRowBegin.ToString() + ":" + CopyRowEnd.ToString()], destWorksheet.Rows[CurrentRowIndex], mergesheets_isFunctionEmbeded.Checked);
                         CurrentRowIndex = CurrentRowIndex + 1 + CopyRowEnd - CopyRowBegin;
                     }
