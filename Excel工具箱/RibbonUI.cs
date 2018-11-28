@@ -25,12 +25,12 @@ namespace Excel工具箱
         //Button Handlers
         private void mergebooks_BeginMerge_Click(object sender, RibbonControlEventArgs e)
         {
-            MergeBooks();
+            MergeBooks(mergebooks_RequireNewBook.Checked, mergebooks_MergeAllSheets.Checked);
         }
         private void mergesheets_BeginMerge_Click(object sender, RibbonControlEventArgs e)
         {
-            if (mergebooks_AIO.Checked) MergeSheetsInBooks();
-            else MergeSheets();
+            if (mergebooks_AIO.Checked) MergeSheetsInBooks(mergebooks_MergeAllSheets.Checked, mergesheets_HeadRowNum.SelectedItemIndex, mergesheets_contentRowNum.SelectedItemIndex, mergesheets_isFunctionEmbeded.Checked);
+            else MergeSheets(mergesheets_HeadRowNum.SelectedItemIndex, mergesheets_contentRowNum.SelectedItemIndex, mergesheets_isFunctionEmbeded.Checked);
         }
         private void convert_Exchange_Click(object sender, RibbonControlEventArgs e)
         {
@@ -44,6 +44,7 @@ namespace Excel工具箱
             object FileOpen = Globals.ThisAddIn.Application.GetOpenFilename(FileFilter: (convert_sourceFormat.SelectedItem.Label + "," + convert_sourceFormat.SelectedItem.Label), MultiSelect: true, Title: "请选择需要转换的工作簿");
             if (FileOpen.GetType() == typeof(bool)) return;
             int ConvertNum = ((System.Collections.IList)FileOpen).Count;
+            int TargetFormatCode = Convert.ToInt32(convert_targetFormat.SelectedItem.Tag);
             Globals.ThisAddIn.Application.ScreenUpdating = false;
             Globals.ThisAddIn.Application.DisplayAlerts = false;
             for (int counter = 1; counter <= ConvertNum; counter++)
@@ -51,7 +52,7 @@ namespace Excel工具箱
                 try
                 {
                     WorkbookToConvert = Globals.ThisAddIn.Application.Workbooks.Open(Filename: (string)((System.Collections.IList)FileOpen)[counter]);
-                    ConvertWorkbookFormat(WorkbookToConvert);
+                    ConvertWorkbookFormat(WorkbookToConvert, TargetFormatCode, convert_targetFormat.SelectedItem.Label);
                     WorkbookToConvert.Close();
                 }
                 catch
@@ -111,12 +112,12 @@ namespace Excel工具箱
             {
                 mergebooks_RequireNewBook.Checked = true;
                 mergebooks_RequireNewBook.Enabled = false;
-                mergebooks_BeginMerge.Enabled = false;
+                mergebooks_BeginMerge.Visible = false;
             }
             else
             {
                 mergebooks_RequireNewBook.Enabled = true;
-                mergebooks_BeginMerge.Enabled = true;
+                mergebooks_BeginMerge.Visible = true;
             }
         }
         private void updateView_Click(object sender, RibbonControlEventArgs e)
@@ -143,7 +144,7 @@ namespace Excel工具箱
             disableConvertExchangeButton();
         }
         //Workers
-        private void MergeBooks()
+        private void MergeBooks(bool RequireNewBook, bool MergeAllSheets)
         {
             Excel.Workbook destWorkbook, sourceWorkbook;
             int currentSheetIndex = 1;
@@ -151,29 +152,29 @@ namespace Excel工具箱
             object FileOpen = Globals.ThisAddIn.Application.GetOpenFilename(FileFilter: FileFitterForMerge, MultiSelect: true, Title: "请选择需要合并的工作簿");
             if (FileOpen.GetType() == typeof(bool)) return;
             MergeNum = ((System.Collections.IList)FileOpen).Count;
-            try
-            {
-                Globals.ThisAddIn.Application.ActiveSheet.GetType();
-            }
-            catch
-            {
-                mergebooks_RequireNewBook.Checked = true;
-            }
-            if (mergebooks_RequireNewBook.Checked == true) destWorkbook = Globals.ThisAddIn.Application.Workbooks.Add();
-            else destWorkbook = Globals.ThisAddIn.Application.ActiveWorkbook;
+            if (RequireNewBook) destWorkbook = Globals.ThisAddIn.Application.Workbooks.Add();
+            else try
+                {
+                    destWorkbook = Globals.ThisAddIn.Application.ActiveWorkbook;
+                }
+                catch
+                {
+                    destWorkbook = Globals.ThisAddIn.Application.Workbooks.Add();
+                }
+
             Globals.ThisAddIn.Application.ScreenUpdating = false;
             for (int counter = 1; counter <= MergeNum; counter++)
             {
                 sourceWorkbook = Globals.ThisAddIn.Application.Workbooks.Open(Filename: (string)((System.Collections.IList)FileOpen)[counter]);
                 foreach (Excel.Worksheet sourceWorksheet in sourceWorkbook.Worksheets)
                 {
-                    if (mergebooks_MergeAllSheets.Checked == false && sourceWorksheet.Index > 1) break;
+                    if (!MergeAllSheets && sourceWorksheet.Index > 1) break;
                     sourceWorksheet.Copy(destWorkbook.Worksheets[currentSheetIndex]);
                     currentSheetIndex++;
                 }
                 sourceWorkbook.Close();
             }
-            if (mergebooks_RequireNewBook.Checked)
+            if (RequireNewBook)
             {
                 Globals.ThisAddIn.Application.DisplayAlerts = false;
                 destWorkbook.Worksheets[currentSheetIndex].Delete();
@@ -181,7 +182,7 @@ namespace Excel工具箱
             }
             Globals.ThisAddIn.Application.ScreenUpdating = true;
         }
-        private void MergeSheets()
+        private void MergeSheets(int HeadRowNum, int ContentRowNum, bool FormulaEmbeded)
         {
             Globals.ThisAddIn.Application.ActiveWorkbook.Sheets[1].Activate();
             Excel.Worksheet destWorksheet = Globals.ThisAddIn.Application.Worksheets.Add();
@@ -197,42 +198,31 @@ namespace Excel工具箱
                 return;
             }
             Globals.ThisAddIn.Application.ScreenUpdating = false;
-            if (mergesheets_contentRowNum.SelectedItemIndex != 0)
+            if (ContentRowNum != 0)
             {
-                int HeadRowNum, CopyRowNum, CopyRowBegin, CopyRowEnd, CurrentRowIndex;
-                HeadRowNum = mergesheets_HeadRowNum.SelectedItemIndex;
-                CopyRowNum = mergesheets_contentRowNum.SelectedItemIndex;
+                int CopyRowBegin, CopyRowEnd, CurrentRowIndex;
                 CopyRowBegin = HeadRowNum + 1;
-                CopyRowEnd = HeadRowNum + CopyRowNum;
-                CurrentRowIndex = 1;
-                if (mergesheets_HeadRowNum.SelectedItemIndex != 0)
-                {
-                    RowCP(sourceWorkbook.Sheets[2].Rows["1:" + mergesheets_HeadRowNum.SelectedItemIndex.ToString()], destWorksheet.Rows[1], mergesheets_isFunctionEmbeded.Checked);
-                    CurrentRowIndex = CurrentRowIndex + mergesheets_HeadRowNum.SelectedItemIndex;
-                }
+                CopyRowEnd = HeadRowNum + ContentRowNum;
+                CurrentRowIndex = 1 + HeadRowNum;
+                if (HeadRowNum != 0) RowCP(sourceWorkbook.Sheets[2].Rows["1:" + HeadRowNum.ToString()], destWorksheet.Rows[1], FormulaEmbeded);
                 for (int CurrentSheetIndex = 2; CurrentSheetIndex <= Globals.ThisAddIn.Application.ActiveWorkbook.Worksheets.Count; CurrentSheetIndex++)
                 {
-                    RowCP(sourceWorkbook.Sheets[CurrentSheetIndex].Rows[CopyRowBegin.ToString() + ":" + CopyRowEnd.ToString()], destWorksheet.Rows[CurrentRowIndex], mergesheets_isFunctionEmbeded.Checked);
-                    CurrentRowIndex = CurrentRowIndex + CopyRowNum;
+                    RowCP(sourceWorkbook.Sheets[CurrentSheetIndex].Rows[CopyRowBegin.ToString() + ":" + CopyRowEnd.ToString()], destWorksheet.Rows[CurrentRowIndex], FormulaEmbeded);
+                    CurrentRowIndex = CurrentRowIndex + ContentRowNum;
                 }
                 destWorksheet.Cells[1].Select();
             }
-            if (mergesheets_contentRowNum.SelectedItemIndex == 0)
+            if (ContentRowNum == 0)
             {
-                int HeadRowNum, CopyRowBegin, CopyRowEnd, CurrentRowIndex;
-                HeadRowNum = mergesheets_HeadRowNum.SelectedItemIndex;
+                int CopyRowBegin, CopyRowEnd, CurrentRowIndex;
                 CopyRowBegin = HeadRowNum + 1;
-                CurrentRowIndex = 1;
-                if (mergesheets_HeadRowNum.SelectedItemIndex != 0)
-                {
-                    RowCP(sourceWorkbook.Sheets[2].Rows["1:" + mergesheets_HeadRowNum.SelectedItemIndex.ToString()], destWorksheet.Rows[1], mergesheets_isFunctionEmbeded.Checked);
-                    CurrentRowIndex = CurrentRowIndex + mergesheets_HeadRowNum.SelectedItemIndex;
-                }
+                CurrentRowIndex = 1 + HeadRowNum;
+                if (HeadRowNum != 0) RowCP(sourceWorkbook.Sheets[2].Rows["1:" + HeadRowNum.ToString()], destWorksheet.Rows[1], FormulaEmbeded);
                 for (int CurrentSheetIndex = 2; CurrentSheetIndex <= Globals.ThisAddIn.Application.ActiveWorkbook.Worksheets.Count; CurrentSheetIndex++)
                 {
                     CopyRowEnd = FirstEmptyRowOf(sourceWorkbook.Worksheets[CurrentSheetIndex], 10) - 1;
                     if (CopyRowEnd < CopyRowBegin) continue;
-                    RowCP(sourceWorkbook.Sheets[CurrentSheetIndex].Rows[CopyRowBegin.ToString() + ":" + CopyRowEnd.ToString()], destWorksheet.Rows[CurrentRowIndex], mergesheets_isFunctionEmbeded.Checked);
+                    RowCP(sourceWorkbook.Sheets[CurrentSheetIndex].Rows[CopyRowBegin.ToString() + ":" + CopyRowEnd.ToString()], destWorksheet.Rows[CurrentRowIndex], FormulaEmbeded);
                     CurrentRowIndex = CurrentRowIndex + 1 + CopyRowEnd - CopyRowBegin;
                 }
                 destWorksheet.Cells[1].Select();
@@ -241,7 +231,7 @@ namespace Excel工具箱
             Clipboard.Clear();
             Globals.ThisAddIn.Application.ScreenUpdating = true;
         }
-        private void MergeSheetsInBooks()
+        private void MergeSheetsInBooks(bool MergeAllSheets, int HeadRowNum, int ContentRowNum, bool FormulaEmbeded)
         {
             Excel.Workbook destWorkbook, sourceWorkbook;
             Excel.Worksheet destWorksheet;
@@ -251,39 +241,37 @@ namespace Excel工具箱
             destWorkbook = Globals.ThisAddIn.Application.Workbooks.Add();
             destWorksheet = Globals.ThisAddIn.Application.ActiveSheet;
             destWorksheet.Name = "Merge";
-            int HeadRowNum, CopyRowBegin, CopyRowEnd, CurrentRowIndex;
-            HeadRowNum = mergesheets_HeadRowNum.SelectedItemIndex;
+            int CopyRowBegin, CopyRowEnd, CurrentRowIndex;
             CurrentRowIndex = CopyRowBegin = HeadRowNum + 1;
             Globals.ThisAddIn.Application.ScreenUpdating = false;
-            if (mergesheets_contentRowNum.SelectedItemIndex != 0)
+            if (ContentRowNum != 0)
             {
-                int CopyRowNum = mergesheets_contentRowNum.SelectedItemIndex;
-                CopyRowEnd = HeadRowNum + CopyRowNum;
+                CopyRowEnd = HeadRowNum + ContentRowNum;
                 for (int counter = 1; counter <= MergeNum; counter++)
                 {
                     sourceWorkbook = Globals.ThisAddIn.Application.Workbooks.Open(Filename: (string)((System.Collections.IList)FileOpen)[counter]);
-                    if (counter == 1 && mergesheets_HeadRowNum.SelectedItemIndex != 0) RowCP(sourceWorkbook.Sheets[1].Rows["1:" + mergesheets_HeadRowNum.SelectedItemIndex.ToString()], destWorksheet.Rows[1], mergesheets_isFunctionEmbeded.Checked);
+                    if (counter == 1 && HeadRowNum != 0) RowCP(sourceWorkbook.Sheets[1].Rows["1:" + HeadRowNum.ToString()], destWorksheet.Rows[1], FormulaEmbeded);
                     foreach (Excel.Worksheet sourceWorksheet in sourceWorkbook.Worksheets)
                     {
-                        if (mergebooks_MergeAllSheets.Checked == false && sourceWorksheet.Index > 1) break;
-                        RowCP(sourceWorksheet.Rows[CopyRowBegin.ToString() + ":" + CopyRowEnd.ToString()], destWorksheet.Rows[CurrentRowIndex], mergesheets_isFunctionEmbeded.Checked);
+                        if (!MergeAllSheets && sourceWorksheet.Index > 1) break;
+                        RowCP(sourceWorksheet.Rows[CopyRowBegin.ToString() + ":" + CopyRowEnd.ToString()], destWorksheet.Rows[CurrentRowIndex], FormulaEmbeded);
                         CurrentRowIndex = CurrentRowIndex + 1 + CopyRowEnd - CopyRowBegin;
                     }
                     sourceWorkbook.Close();
                 }
             }
-            if (mergesheets_contentRowNum.SelectedItemIndex == 0)
+            if (ContentRowNum == 0)
             {
                 for (int counter = 1; counter <= MergeNum; counter++)
                 {
                     sourceWorkbook = Globals.ThisAddIn.Application.Workbooks.Open(Filename: (string)((System.Collections.IList)FileOpen)[counter]);
-                    if (counter == 1 && mergesheets_HeadRowNum.SelectedItemIndex != 0) RowCP(sourceWorkbook.Sheets[1].Rows["1:" + mergesheets_HeadRowNum.SelectedItemIndex.ToString()], destWorksheet.Rows[1], mergesheets_isFunctionEmbeded.Checked);
+                    if (counter == 1 && HeadRowNum != 0) RowCP(sourceWorkbook.Sheets[1].Rows["1:" + HeadRowNum.ToString()], destWorksheet.Rows[1], FormulaEmbeded);
                     foreach (Excel.Worksheet sourceWorksheet in sourceWorkbook.Worksheets)
                     {
-                        if (mergebooks_MergeAllSheets.Checked == false && sourceWorksheet.Index > 1) break;
+                        if (!MergeAllSheets && sourceWorksheet.Index > 1) break;
                         CopyRowEnd = FirstEmptyRowOf(sourceWorksheet, 10) - 1;
                         if (CopyRowEnd < CopyRowBegin) continue;
-                        RowCP(sourceWorksheet.Rows[CopyRowBegin.ToString() + ":" + CopyRowEnd.ToString()], destWorksheet.Rows[CurrentRowIndex], mergesheets_isFunctionEmbeded.Checked);
+                        RowCP(sourceWorksheet.Rows[CopyRowBegin.ToString() + ":" + CopyRowEnd.ToString()], destWorksheet.Rows[CurrentRowIndex], FormulaEmbeded);
                         CurrentRowIndex = CurrentRowIndex + 1 + CopyRowEnd - CopyRowBegin;
                     }
                     sourceWorkbook.Close();
@@ -292,9 +280,9 @@ namespace Excel工具箱
             destWorksheet.Cells[1].Select();
             Globals.ThisAddIn.Application.ScreenUpdating = true;
         }
-        private void RowCP(Excel.Range source, Excel.Range dest, bool functionEmbeded)
+        private void RowCP(Excel.Range source, Excel.Range dest, bool IsformulaEmbeded)
         {
-            if (functionEmbeded)
+            if (IsformulaEmbeded)
             {
                 source.Copy();
                 dest.PasteSpecial(XlPasteType.xlPasteAllUsingSourceTheme, XlPasteSpecialOperation.xlPasteSpecialOperationNone, false, false);
@@ -303,31 +291,12 @@ namespace Excel工具箱
             }
             else source.Copy(dest);
         }
-        private void ConvertWorkbookFormat(Excel.Workbook workbook)
+        private void ConvertWorkbookFormat(Excel.Workbook Workbook, int TargetFormatCode, string TargetFormat)
         {
             //MessageBox.Show(((int)workbook.FileFormat).ToString());
             //return;
-            int FormatType = FormatCode(convert_targetFormat.SelectedItemIndex);
-            if (FormatType != 0) workbook.SaveAs(workbook.Name + convert_targetFormat.SelectedItem.Label, (XlFileFormat)FormatType, ConflictResolution: XlSaveConflictResolution.xlLocalSessionChanges);
-            else workbook.ExportAsFixedFormat(XlFixedFormatType.xlTypePDF, workbook.Name + convert_targetFormat.SelectedItem.Label);
-        }
-        private int FormatCode(int code)
-        {
-            switch (code)
-            {
-                case 0:
-                    return 51;
-                case 1:
-                    return 50;
-                case 2:
-                    return 52;
-                case 3:
-                    return 56;
-                case 4:
-                    return 6;
-                default:
-                    return 0;
-            }
+            if (TargetFormatCode != 0) Workbook.SaveAs(Workbook.Name + TargetFormat, (XlFileFormat)TargetFormatCode, ConflictResolution: XlSaveConflictResolution.xlLocalSessionChanges);
+            else Workbook.ExportAsFixedFormat(XlFixedFormatType.xlTypePDF, Workbook.Name + ".pdf");
         }
         private int FirstEmptyRowOf(Excel.Worksheet testSheet, int testCellsNumEachRow)
         {
