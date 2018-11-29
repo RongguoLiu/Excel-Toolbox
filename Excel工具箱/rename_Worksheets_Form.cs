@@ -17,7 +17,7 @@ namespace Excel工具箱
 {
     public partial class rename_Worksheets_Form : Form
     {
-        int[] RangePosition = new int[] { 0, 0 };
+        int[] RelatedRangePosition = new int[] { 0, 0 };
 
         public rename_Worksheets_Form()
         {
@@ -33,23 +33,23 @@ namespace Excel工具箱
         {
             if (IsValueRelated.Checked)
             {
-                RangePosition = Globals.ThisAddIn.CellSelector();
-                if (RangePosition[0] == 0 || RangePosition[1] == 0)
+                RelatedRangePosition = Globals.ThisAddIn.CellSelector("请选择相关单元格");
+                if (RelatedRangePosition[0] == 0 || RelatedRangePosition[1] == 0)
                 {
-                    RangePosition = new int[] { 0, 0 };
+                    RelatedRangePosition = new int[] { 0, 0 };
                     IsValueRelated.Checked = false;
                     IsValueRelated.Text = "新文件名与单元格值相关";
                     insert_CellValue.Enabled = false;
                 }
                 else
                 {
-                    IsValueRelated.Text = "新文件名与该单元格值相关：(" + RangePosition[0].ToString() + "," + RangePosition[1].ToString() + ")";
+                    IsValueRelated.Text = "新文件名与该单元格值相关：R" + RelatedRangePosition[0].ToString() + "C" + RelatedRangePosition[1].ToString();
                     insert_CellValue.Enabled = true;
                 }
             }
             else
             {
-                RangePosition = new int[] { 0, 0 };
+                RelatedRangePosition = new int[] { 0, 0 };
                 IsValueRelated.Text = "新文件名与单元格值相关";
                 insert_CellValue.Enabled = false;
                 NewName.Text = "";
@@ -73,21 +73,26 @@ namespace Excel工具箱
 
         private void begin_Rename_Click(object sender, EventArgs e)
         {
+            if (!Globals.ThisAddIn.ActiveWorkbookExists()) return;
             string NewnameCurrentSheet;
-            foreach(Excel.Worksheet worksheet in Globals.ThisAddIn.Application.ActiveWorkbook.Worksheets)
+            foreach (Excel.Worksheet worksheet in Globals.ThisAddIn.Application.ActiveWorkbook.Worksheets)
             {
                 NewnameCurrentSheet = NewName.Text;
-                if (IsValueRelated.Checked) NewnameCurrentSheet = NewnameCurrentSheet.Replace("^Val", worksheet.Cells[RangePosition[0], RangePosition[1]].Value);
+                if (IsValueRelated.Checked) NewnameCurrentSheet = NewnameCurrentSheet.Replace("^Val", worksheet.Cells[RelatedRangePosition[0], RelatedRangePosition[1]].Value);
                 NewnameCurrentSheet = NewnameCurrentSheet.Replace("^1", worksheet.Index.ToString());
-                NewnameCurrentSheet = NewnameCurrentSheet.Replace("^一", Globals.ThisAddIn.IndexInChinese(worksheet.Index));
-                try
+                NewnameCurrentSheet = NewnameCurrentSheet.Replace("^一", Globals.ThisAddIn.DigiInChinese(worksheet.Index));
+                for(int i = 0; true; i++)
                 {
-                    worksheet.Name = NewnameCurrentSheet;
-                }
-                catch
-                {
-                    MessageBox.Show("出现了错误，位于表"+worksheet.Index.ToString()+"。是否重名？");
-                    continue;
+                    try
+                    {
+                        if (i == 0) worksheet.Name = NewnameCurrentSheet;
+                        else worksheet.Name = NewnameCurrentSheet + "(" + i.ToString() + ")";
+                        break;
+                    }
+                    catch
+                    {
+                        continue;
+                    }
                 }
             }
         }
