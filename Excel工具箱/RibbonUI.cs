@@ -19,8 +19,10 @@ namespace Excel工具箱
             mergesheets_contentRowNum.SelectedItemIndex = 1;
             convert_sourceFormat.SelectedItemIndex = 3;
             convert_targetFormat.SelectedItemIndex = 0;
+            SheetRenamer = new rename_Worksheets_Form();
         }
         //Consts
+        rename_Worksheets_Form SheetRenamer;
         const string FileFitterForMerge = "Microsoft Excel文件(*.xlsx),*.xlsx,Excel 97-2003 工作簿(*.xls),*xls,CSV(逗号分隔)(*.csv),*.csv";
         //Button Handlers
         private void mergebooks_BeginMerge_Click(object sender, RibbonControlEventArgs e)
@@ -64,6 +66,11 @@ namespace Excel工具箱
             Globals.ThisAddIn.Application.ScreenUpdating = true;
             Globals.ThisAddIn.Application.DisplayAlerts = true;
             MessageBox.Show("转换完成");
+        }
+        private void rename_RenameWorksheets_Click(object sender, RibbonControlEventArgs e)
+        {
+            SheetRenamer = new rename_Worksheets_Form();
+            SheetRenamer.Show();
         }
         private void others_DeleteOtherSheets_Click(object sender, RibbonControlEventArgs e)
         {

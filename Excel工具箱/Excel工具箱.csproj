@@ -179,9 +179,18 @@
     can be found.
   -->
   <ItemGroup>
+    <Compile Include="rename_Worksheets_Form.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="rename_Worksheets_Form.Designer.cs">
+      <DependentUpon>rename_Worksheets_Form.cs</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
+    <EmbeddedResource Include="rename_Worksheets_Form.resx">
+      <DependentUpon>rename_Worksheets_Form.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
