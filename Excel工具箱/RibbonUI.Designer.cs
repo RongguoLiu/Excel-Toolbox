@@ -77,13 +77,16 @@
             this.mergesheets_contentRowNum = this.Factory.CreateRibbonDropDown();
             this.mergesheets_isFunctionEmbeded = this.Factory.CreateRibbonCheckBox();
             this.mergesheets_BeginMerge = this.Factory.CreateRibbonButton();
-            this.convert = this.Factory.CreateRibbonGroup();
+            this.groupConvert = this.Factory.CreateRibbonGroup();
             this.convert_sourceFormat = this.Factory.CreateRibbonDropDown();
             this.convert_targetFormat = this.Factory.CreateRibbonDropDown();
             this.buttonGroup1 = this.Factory.CreateRibbonButtonGroup();
             this.convert_Exchange = this.Factory.CreateRibbonButton();
             this.convert_Spreater = this.Factory.CreateRibbonButton();
             this.convert_BeginConvert = this.Factory.CreateRibbonButton();
+            this.groupRename = this.Factory.CreateRibbonGroup();
+            this.rename_RenameWorksheets = this.Factory.CreateRibbonButton();
+            this.rename_RenameWorkbooks = this.Factory.CreateRibbonButton();
             this.others = this.Factory.CreateRibbonGroup();
             this.others_DeleteOtherSheets = this.Factory.CreateRibbonButton();
             this.LookForFirstEmptyRow = this.Factory.CreateRibbonButton();
@@ -97,8 +100,9 @@
             this.tab1.SuspendLayout();
             this.groupMergeBooks.SuspendLayout();
             this.groupMergeSheets.SuspendLayout();
-            this.convert.SuspendLayout();
+            this.groupConvert.SuspendLayout();
             this.buttonGroup1.SuspendLayout();
+            this.groupRename.SuspendLayout();
             this.others.SuspendLayout();
             this.dangerous_zone.SuspendLayout();
             this.support.SuspendLayout();
@@ -109,7 +113,8 @@
             this.tab1.ControlId.ControlIdType = Microsoft.Office.Tools.Ribbon.RibbonControlIdType.Office;
             this.tab1.Groups.Add(this.groupMergeBooks);
             this.tab1.Groups.Add(this.groupMergeSheets);
-            this.tab1.Groups.Add(this.convert);
+            this.tab1.Groups.Add(this.groupConvert);
+            this.tab1.Groups.Add(this.groupRename);
             this.tab1.Groups.Add(this.others);
             this.tab1.Groups.Add(this.dangerous_zone);
             this.tab1.Groups.Add(this.support);
@@ -224,13 +229,13 @@
             this.mergesheets_BeginMerge.ShowImage = true;
             this.mergesheets_BeginMerge.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.mergesheets_BeginMerge_Click);
             // 
-            // convert
+            // groupConvert
             // 
-            this.convert.Items.Add(this.convert_sourceFormat);
-            this.convert.Items.Add(this.convert_targetFormat);
-            this.convert.Items.Add(this.buttonGroup1);
-            this.convert.Label = "工作簿格式转换";
-            this.convert.Name = "convert";
+            this.groupConvert.Items.Add(this.convert_sourceFormat);
+            this.groupConvert.Items.Add(this.convert_targetFormat);
+            this.groupConvert.Items.Add(this.buttonGroup1);
+            this.groupConvert.Label = "工作簿格式转换";
+            this.groupConvert.Name = "groupConvert";
             // 
             // convert_sourceFormat
             // 
@@ -308,6 +313,29 @@
             this.convert_BeginConvert.OfficeImageId = "FileSaveAsOtherFormats";
             this.convert_BeginConvert.ShowImage = true;
             this.convert_BeginConvert.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.convert_BeginConvert_Click);
+            // 
+            // groupRename
+            // 
+            this.groupRename.Items.Add(this.rename_RenameWorksheets);
+            this.groupRename.Items.Add(this.rename_RenameWorkbooks);
+            this.groupRename.Label = "批量重命名";
+            this.groupRename.Name = "groupRename";
+            // 
+            // rename_RenameWorksheets
+            // 
+            this.rename_RenameWorksheets.Label = "重命名工作表";
+            this.rename_RenameWorksheets.Name = "rename_RenameWorksheets";
+            this.rename_RenameWorksheets.OfficeImageId = "DatasheetColumnRename";
+            this.rename_RenameWorksheets.ShowImage = true;
+            this.rename_RenameWorksheets.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.rename_RenameWorksheets_Click);
+            // 
+            // rename_RenameWorkbooks
+            // 
+            this.rename_RenameWorkbooks.Label = "重命名工作簿";
+            this.rename_RenameWorkbooks.Name = "rename_RenameWorkbooks";
+            this.rename_RenameWorkbooks.OfficeImageId = "UpgradeWorkbook";
+            this.rename_RenameWorkbooks.ShowImage = true;
+            this.rename_RenameWorkbooks.Visible = false;
             // 
             // others
             // 
@@ -399,10 +427,12 @@
             this.groupMergeBooks.PerformLayout();
             this.groupMergeSheets.ResumeLayout(false);
             this.groupMergeSheets.PerformLayout();
-            this.convert.ResumeLayout(false);
-            this.convert.PerformLayout();
+            this.groupConvert.ResumeLayout(false);
+            this.groupConvert.PerformLayout();
             this.buttonGroup1.ResumeLayout(false);
             this.buttonGroup1.PerformLayout();
+            this.groupRename.ResumeLayout(false);
+            this.groupRename.PerformLayout();
             this.others.ResumeLayout(false);
             this.others.PerformLayout();
             this.dangerous_zone.ResumeLayout(false);
@@ -435,7 +465,7 @@
         internal Microsoft.Office.Tools.Ribbon.RibbonGroup support;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton help_About;
         internal Microsoft.Office.Tools.Ribbon.RibbonCheckBox mergebooks_AIO;
-        internal Microsoft.Office.Tools.Ribbon.RibbonGroup convert;
+        internal Microsoft.Office.Tools.Ribbon.RibbonGroup groupConvert;
         internal Microsoft.Office.Tools.Ribbon.RibbonDropDown convert_sourceFormat;
         internal Microsoft.Office.Tools.Ribbon.RibbonDropDown convert_targetFormat;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton convert_BeginConvert;
@@ -443,6 +473,9 @@
         internal Microsoft.Office.Tools.Ribbon.RibbonButton convert_Exchange;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton convert_Spreater;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton dangerzone_tryFix;
+        internal Microsoft.Office.Tools.Ribbon.RibbonGroup groupRename;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton rename_RenameWorksheets;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton rename_RenameWorkbooks;
     }
 
     partial class ThisRibbonCollection
