@@ -18,12 +18,13 @@ namespace Excel工具箱
         private DigitToChnText digitToChnText = new DigitToChnText();
         private const string FileFitter = "Microsoft Excel文件(*.xlsx),*.xlsx,Excel 97-2003 工作簿(*.xls),*xls,CSV(逗号分隔)(*.csv),*.csv";
         public bool EnableHighlight = false;
-        public rename_Worksheets_Form SheetRenamer = new rename_Worksheets_Form();
+        public rename_Worksheets_Form SheetRenamer;
         public Random random = new Random();
 
         private void ThisAddIn_Startup(object sender, System.EventArgs e)
         {
             Globals.ThisAddIn.Application.SheetSelectionChange += new Excel.AppEvents_SheetSelectionChangeEventHandler(Application_SheetSelectionChange);
+            rename_Worksheets_Form SheetRenamer = new rename_Worksheets_Form();
         }
         private void ThisAddIn_Shutdown(object sender, System.EventArgs e)
         {
@@ -66,7 +67,9 @@ namespace Excel工具箱
             if (FileOpen.GetType() == typeof(bool)) return;
             MergeNum = ((System.Collections.IList)FileOpen).Count;
             if (RequireNewBook) destWorkbook = Globals.ThisAddIn.Application.Workbooks.Add();
-            else try
+            else
+            {
+                try
                 {
                     destWorkbook = Globals.ThisAddIn.Application.ActiveWorkbook;
                 }
@@ -74,7 +77,7 @@ namespace Excel工具箱
                 {
                     destWorkbook = Globals.ThisAddIn.Application.Workbooks.Add();
                 }
-
+            }
             Globals.ThisAddIn.Application.ScreenUpdating = false;
             for (int counter = 1; counter <= MergeNum; counter++)
             {

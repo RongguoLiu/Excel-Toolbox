@@ -19,6 +19,9 @@ namespace Excel工具箱
             mergesheets_contentRowNum.SelectedItemIndex = 1;
             convert_sourceFormat.SelectedItemIndex = 3;
             convert_targetFormat.SelectedItemIndex = 0;
+            //Globals.ThisAddIn.Application.SheetDeactivate += new AppEvents_SheetDeactivateEventHandler(Application_SheetDeactivate);
+            Globals.ThisAddIn.Application.WorkbookDeactivate += new Excel.AppEvents_WorkbookDeactivateEventHandler(Application_WorkbookDeactivate);
+            Globals.ThisAddIn.Application.WorkbookActivate += new Excel.AppEvents_WorkbookActivateEventHandler(Application_WorkbookActivate);
         }
         //Button Handlers
         private void mergebooks_BeginMerge_Click(object sender, RibbonControlEventArgs e)
@@ -187,11 +190,14 @@ namespace Excel工具箱
                 mergebooks_RequireNewBook.Checked = true;
                 mergebooks_RequireNewBook.Enabled = false;
                 mergebooks_BeginMerge.Visible = false;
+                mergesheets_BeginMerge.Enabled = true;
             }
             else
             {
                 mergebooks_RequireNewBook.Enabled = true;
                 mergebooks_BeginMerge.Visible = true;
+                if(Globals.ThisAddIn.ActiveWorkbookExists()) mergesheets_BeginMerge.Enabled = true;
+                else mergesheets_BeginMerge.Enabled = false;
             }
         }
         private void cellActions_HighlightCurrentRC_Click(object sender, RibbonControlEventArgs e)
@@ -219,6 +225,32 @@ namespace Excel工具箱
         {
             if (convert_sourceFormat.SelectedItemIndex == 5 || convert_targetFormat.SelectedItemIndex == 5) convert_Exchange.Enabled = false;
             else convert_Exchange.Enabled = true;
+        }
+        //UI Refresher
+        private void Application_WorkbookDeactivate(Excel.Workbook wb)
+        {
+            mergebooks_RequireNewBook.Checked = true;
+            mergebooks_RequireNewBook.Enabled = false;
+            mergesheets_BeginMerge.Enabled = false;
+            cellActions_ConvertToValue.Enabled = false;
+            cellActions_ConvertToString.Enabled = false;
+            cellActions_HighlightCurrentRC.Enabled = false;
+            rename_RenameWorksheets.Enabled = false;
+            rename_SortSheets.Enabled = false;
+            others_DeleteOtherSheets.Enabled = false;
+            LookForFirstEmptyRow.Enabled = false;
+        }
+        private void Application_WorkbookActivate(Excel.Workbook wb)
+        {
+            mergebooks_RequireNewBook.Enabled = true;
+            mergesheets_BeginMerge.Enabled = true;
+            cellActions_ConvertToValue.Enabled = true;
+            cellActions_ConvertToString.Enabled = true;
+            cellActions_HighlightCurrentRC.Enabled = true;
+            rename_RenameWorksheets.Enabled = true;
+            rename_SortSheets.Enabled = true;
+            others_DeleteOtherSheets.Enabled = true;
+            LookForFirstEmptyRow.Enabled = true;
         }
     }
 }
