@@ -1,7 +1,7 @@
 ﻿using System;
+using System.Text;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Microsoft.Office.Interop.Excel;
 using Microsoft.Office.Tools.Ribbon;
 using Excel = Microsoft.Office.Interop.Excel;
@@ -63,6 +63,43 @@ namespace Excel工具箱
             Globals.ThisAddIn.Application.DisplayAlerts = true;
             MessageBox.Show("转换完成");
         }
+        private void cellActions_ConvertToValue_Click(object sender, RibbonControlEventArgs e)
+        {
+            if (Globals.ThisAddIn.SelectedRangeCount() == 0)
+            {
+                MessageBox.Show("操作未执行");
+                return;
+            }
+            Globals.ThisAddIn.Application.ScreenUpdating = false;
+            double d;
+            foreach(Excel.Range range in (Excel.Range)Globals.ThisAddIn.Application.Selection)
+            {
+                if (range.Text == "") continue;
+                if(double.TryParse(range.Text, out d)) range.Value = d;
+            }
+            Globals.ThisAddIn.Application.ScreenUpdating = true;
+        }
+        private void cellActions_ConvertToString_Click(object sender, RibbonControlEventArgs e)
+        {
+            if (Globals.ThisAddIn.SelectedRangeCount() == 0)
+            {
+                MessageBox.Show("操作未执行");
+                return;
+            }
+            Globals.ThisAddIn.Application.ScreenUpdating = false;
+            foreach (Excel.Range range in (Excel.Range)Globals.ThisAddIn.Application.Selection)
+            {
+                try
+                {
+                    range.Value = range.Value.ToString();
+                }
+                catch
+                {
+                    continue;
+                }
+            }
+            Globals.ThisAddIn.Application.ScreenUpdating = true;
+        }
         private void rename_RenameWorksheets_Click(object sender, RibbonControlEventArgs e)
         {
             if (!Globals.ThisAddIn.ActiveWorkbookExists()) return;
@@ -119,7 +156,6 @@ namespace Excel工具箱
         private void others_ClrClipboard_Click(object sender, RibbonControlEventArgs e)
         {
             Clipboard.Clear();
-
         }
         private void others_LookForFirstEmptyRow_Click(object sender, RibbonControlEventArgs e)
         {
@@ -157,6 +193,12 @@ namespace Excel工具箱
                 mergebooks_RequireNewBook.Enabled = true;
                 mergebooks_BeginMerge.Visible = true;
             }
+        }
+        private void cellActions_HighlightCurrentRC_Click(object sender, RibbonControlEventArgs e)
+        {
+            Globals.ThisAddIn.EnableHighlight = cellActions_HighlightCurrentRC.Checked;
+            if (Globals.ThisAddIn.ActiveWorkbookExists() && !cellActions_HighlightCurrentRC.Checked) Globals.ThisAddIn.Application.ActiveSheet.Cells.Interior.ColorIndex = -4142;
+            if (Globals.ThisAddIn.ActiveWorkbookExists() && cellActions_HighlightCurrentRC.Checked) Globals.ThisAddIn.HighlightCurrentRC();
         }
         private void updateView_Click(object sender, RibbonControlEventArgs e)
         {

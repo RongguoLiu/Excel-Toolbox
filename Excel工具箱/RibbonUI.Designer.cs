@@ -79,6 +79,7 @@
             this.convert_sourceFormat = this.Factory.CreateRibbonDropDown();
             this.convert_targetFormat = this.Factory.CreateRibbonDropDown();
             this.buttonGroup1 = this.Factory.CreateRibbonButtonGroup();
+            this.cellActions = this.Factory.CreateRibbonGroup();
             this.groupRename = this.Factory.CreateRibbonGroup();
             this.others = this.Factory.CreateRibbonGroup();
             this.dangerous_zone = this.Factory.CreateRibbonGroup();
@@ -90,6 +91,9 @@
             this.convert_Exchange = this.Factory.CreateRibbonButton();
             this.convert_Spreater = this.Factory.CreateRibbonButton();
             this.convert_BeginConvert = this.Factory.CreateRibbonButton();
+            this.cellActions_ConvertToValue = this.Factory.CreateRibbonButton();
+            this.cellActions_ConvertToString = this.Factory.CreateRibbonButton();
+            this.cellActions_HighlightCurrentRC = this.Factory.CreateRibbonToggleButton();
             this.rename_RenameWorksheets = this.Factory.CreateRibbonButton();
             this.rename_SortSheets = this.Factory.CreateRibbonButton();
             this.rename_RenameWorkbooks = this.Factory.CreateRibbonButton();
@@ -103,6 +107,7 @@
             this.groupMergeSheets.SuspendLayout();
             this.groupConvert.SuspendLayout();
             this.buttonGroup1.SuspendLayout();
+            this.cellActions.SuspendLayout();
             this.groupRename.SuspendLayout();
             this.others.SuspendLayout();
             this.dangerous_zone.SuspendLayout();
@@ -115,6 +120,7 @@
             this.tab1.Groups.Add(this.groupMergeBooks);
             this.tab1.Groups.Add(this.groupMergeSheets);
             this.tab1.Groups.Add(this.groupConvert);
+            this.tab1.Groups.Add(this.cellActions);
             this.tab1.Groups.Add(this.groupRename);
             this.tab1.Groups.Add(this.others);
             this.tab1.Groups.Add(this.dangerous_zone);
@@ -275,6 +281,14 @@
             this.buttonGroup1.Items.Add(this.convert_BeginConvert);
             this.buttonGroup1.Name = "buttonGroup1";
             // 
+            // cellActions
+            // 
+            this.cellActions.Items.Add(this.cellActions_ConvertToValue);
+            this.cellActions.Items.Add(this.cellActions_ConvertToString);
+            this.cellActions.Items.Add(this.cellActions_HighlightCurrentRC);
+            this.cellActions.Label = "单元格操作";
+            this.cellActions.Name = "cellActions";
+            // 
             // groupRename
             // 
             this.groupRename.Items.Add(this.rename_RenameWorksheets);
@@ -298,6 +312,7 @@
             this.dangerous_zone.Items.Add(this.dangerzone_tryFix);
             this.dangerous_zone.Label = "危险区域";
             this.dangerous_zone.Name = "dangerous_zone";
+            this.dangerous_zone.Visible = false;
             // 
             // dangerzone_updateView
             // 
@@ -318,6 +333,7 @@
             this.support.Items.Add(this.help_About);
             this.support.Label = "帮助和反馈";
             this.support.Name = "support";
+            this.support.Visible = false;
             // 
             // mergebooks_BeginMerge
             // 
@@ -358,6 +374,24 @@
             this.convert_BeginConvert.OfficeImageId = "FileSaveAsOtherFormats";
             this.convert_BeginConvert.ShowImage = true;
             this.convert_BeginConvert.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.convert_BeginConvert_Click);
+            // 
+            // cellActions_ConvertToValue
+            // 
+            this.cellActions_ConvertToValue.Label = "转化为数值";
+            this.cellActions_ConvertToValue.Name = "cellActions_ConvertToValue";
+            this.cellActions_ConvertToValue.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.cellActions_ConvertToValue_Click);
+            // 
+            // cellActions_ConvertToString
+            // 
+            this.cellActions_ConvertToString.Label = "转换为文本";
+            this.cellActions_ConvertToString.Name = "cellActions_ConvertToString";
+            this.cellActions_ConvertToString.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.cellActions_ConvertToString_Click);
+            // 
+            // cellActions_HighlightCurrentRC
+            // 
+            this.cellActions_HighlightCurrentRC.Label = "高亮当前行列";
+            this.cellActions_HighlightCurrentRC.Name = "cellActions_HighlightCurrentRC";
+            this.cellActions_HighlightCurrentRC.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.cellActions_HighlightCurrentRC_Click);
             // 
             // rename_RenameWorksheets
             // 
@@ -423,7 +457,6 @@
             this.help_About.Name = "help_About";
             this.help_About.OfficeImageId = "Info";
             this.help_About.ShowImage = true;
-            this.help_About.Visible = false;
             this.help_About.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.help_About_Click);
             // 
             // RibbonUI
@@ -442,6 +475,8 @@
             this.groupConvert.PerformLayout();
             this.buttonGroup1.ResumeLayout(false);
             this.buttonGroup1.PerformLayout();
+            this.cellActions.ResumeLayout(false);
+            this.cellActions.PerformLayout();
             this.groupRename.ResumeLayout(false);
             this.groupRename.PerformLayout();
             this.others.ResumeLayout(false);
@@ -488,6 +523,10 @@
         internal Microsoft.Office.Tools.Ribbon.RibbonButton rename_RenameWorksheets;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton rename_RenameWorkbooks;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton rename_SortSheets;
+        internal Microsoft.Office.Tools.Ribbon.RibbonGroup cellActions;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton cellActions_ConvertToValue;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton cellActions_ConvertToString;
+        internal Microsoft.Office.Tools.Ribbon.RibbonToggleButton cellActions_HighlightCurrentRC;
     }
 
     partial class ThisRibbonCollection

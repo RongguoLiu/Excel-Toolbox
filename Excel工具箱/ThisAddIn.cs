@@ -17,11 +17,13 @@ namespace Excel工具箱
     {
         private DigitToChnText digitToChnText = new DigitToChnText();
         private const string FileFitter = "Microsoft Excel文件(*.xlsx),*.xlsx,Excel 97-2003 工作簿(*.xls),*xls,CSV(逗号分隔)(*.csv),*.csv";
+        public bool EnableHighlight = false;
         public rename_Worksheets_Form SheetRenamer = new rename_Worksheets_Form();
         public Random random = new Random();
 
         private void ThisAddIn_Startup(object sender, System.EventArgs e)
         {
+            Globals.ThisAddIn.Application.SheetSelectionChange += new Excel.AppEvents_SheetSelectionChangeEventHandler(Application_SheetSelectionChange);
         }
         private void ThisAddIn_Shutdown(object sender, System.EventArgs e)
         {
@@ -205,8 +207,6 @@ namespace Excel工具箱
         }
         public void ConvertWorkbookFormat(Excel.Workbook Workbook, int TargetFormatCode, string TargetFormat)
         {
-            //MessageBox.Show(((int)workbook.FileFormat).ToString());
-            //return;
             if (TargetFormatCode != 0) Workbook.SaveAs(Workbook.Name + TargetFormat, (XlFileFormat)TargetFormatCode, ConflictResolution: XlSaveConflictResolution.xlLocalSessionChanges);
             else Workbook.ExportAsFixedFormat(XlFixedFormatType.xlTypePDF, Workbook.Name + ".pdf");
         }
@@ -241,7 +241,65 @@ namespace Excel工具箱
                 return false;
             }
         }
+        public bool SelectedRangeExists()
+        {
+            try
+            {
+                int test = ((Excel.Range)Globals.ThisAddIn.Application.Selection).Count;
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+        public int SelectedRangeCount()
+        {
+            try
+            {
+                return ((Excel.Range)Globals.ThisAddIn.Application.Selection).Count;
+            }
+            catch
+            {
+                return 0;
+            }
 
+        }
+
+        private void Application_SheetSelectionChange(object Sh, Excel.Range Target)
+        {
+            if (EnableHighlight) HighlightCurrentRC();
+        }
+        public void HighlightCurrentRC()
+        {
+            if (Application.Selection.Count <= 1024)
+            {
+                try
+                {
+                    Globals.ThisAddIn.Application.ActiveSheet.Cells.Interior.ColorIndex = -4142;
+                    Application.ScreenUpdating = false;
+                    foreach (Range range in Application.Selection)
+                    {
+                        range.EntireColumn.Interior.Color = XlRgbColor.rgbGainsboro;
+                        range.EntireRow.Interior.Color = XlRgbColor.rgbGainsboro;
+                    }
+                }
+                catch
+                {
+
+                }
+                finally
+                {
+                    Application.ScreenUpdating = true;
+                }
+            }
+            else
+            {
+                Globals.ThisAddIn.Application.ActiveSheet.Cells.Interior.ColorIndex = -4142;
+                //Globals.ThisAddIn.Application.ActiveCell.EntireColumn.Interior.Color = XlRgbColor.rgbGainsboro;
+                //Globals.ThisAddIn.Application.ActiveCell.EntireRow.Interior.Color = XlRgbColor.rgbGainsboro;
+            }
+        }
         #region 从Internet上copy的代码
 
         /// 本程序用于将小写数字变成大写中文数字
