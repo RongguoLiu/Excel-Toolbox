@@ -165,6 +165,34 @@ namespace Excel工具箱
             if (!Globals.ThisAddIn.ActiveWorkbookExists()) return;
             Globals.ThisAddIn.Application.ActiveSheet.Rows[Globals.ThisAddIn.FirstEmptyRowOf(Globals.ThisAddIn.Application.ActiveSheet, 10)].Select();
         }
+        private void others_ConvertUI_Click(object sender, RibbonControlEventArgs e)
+        {
+            try
+            {
+                Globals.ThisAddIn.UniversalConverter.Show();
+                Globals.ThisAddIn.UniversalConverter.Activate();
+            }
+            catch
+            {
+                Globals.ThisAddIn.UniversalConverter = new UniversalConvert_Form();
+                Globals.ThisAddIn.UniversalConverter.Show();
+                Globals.ThisAddIn.UniversalConverter.Activate();
+            }
+        }
+        private void groupConvert_DialogLauncherClick(object sender, RibbonControlEventArgs e)
+        {
+            try
+            {
+                Globals.ThisAddIn.UniversalConverter.Show();
+                Globals.ThisAddIn.UniversalConverter.Activate();
+            }
+            catch
+            {
+                Globals.ThisAddIn.UniversalConverter = new UniversalConvert_Form();
+                Globals.ThisAddIn.UniversalConverter.Show();
+                Globals.ThisAddIn.UniversalConverter.Activate();
+            }
+        }
         private void dangerzone_tryFix_Click(object sender, RibbonControlEventArgs e)
         {
             Globals.ThisAddIn.Application.ScreenUpdating = true;
@@ -194,10 +222,17 @@ namespace Excel工具箱
             }
             else
             {
-                mergebooks_RequireNewBook.Enabled = true;
                 mergebooks_BeginMerge.Visible = true;
-                if(Globals.ThisAddIn.ActiveWorkbookExists()) mergesheets_BeginMerge.Enabled = true;
-                else mergesheets_BeginMerge.Enabled = false;
+                if (Globals.ThisAddIn.ActiveWorkbookExists())
+                {
+                    mergebooks_RequireNewBook.Enabled = true;
+                    mergesheets_BeginMerge.Enabled = true;
+                }
+                else
+                {
+                    mergebooks_RequireNewBook.Enabled = false;
+                    mergesheets_BeginMerge.Enabled = false;
+                }
             }
         }
         private void cellActions_HighlightCurrentRC_Click(object sender, RibbonControlEventArgs e)

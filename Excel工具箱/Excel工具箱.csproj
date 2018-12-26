@@ -33,7 +33,7 @@
     <PublishUrl>publish\</PublishUrl>
     <InstallUrl />
     <TargetCulture>zh-chs</TargetCulture>
-    <ApplicationVersion>2.1.0.0</ApplicationVersion>
+    <ApplicationVersion>2.2.0.0</ApplicationVersion>
     <AutoIncrementApplicationRevision>false</AutoIncrementApplicationRevision>
     <UpdateEnabled>true</UpdateEnabled>
     <UpdateInterval>7</UpdateInterval>
@@ -123,6 +123,9 @@
   -->
   <ItemGroup>
     <Reference Include="Accessibility" />
+    <Reference Include="Microsoft.Office.Interop.PowerPoint, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -188,6 +191,12 @@
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="UniversalConvert_Form.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UniversalConvert_Form.Designer.cs">
+      <DependentUpon>UniversalConvert_Form.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="rename_Worksheets_Form.resx">
       <DependentUpon>rename_Worksheets_Form.cs</DependentUpon>
     </EmbeddedResource>
@@ -202,6 +211,9 @@
     </Compile>
     <EmbeddedResource Include="RibbonUI.resx">
       <DependentUpon>RibbonUI.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UniversalConvert_Form.resx">
+      <DependentUpon>UniversalConvert_Form.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Excel工具箱_TemporaryKey.pfx" />
     <None Include="Properties\Settings.settings">

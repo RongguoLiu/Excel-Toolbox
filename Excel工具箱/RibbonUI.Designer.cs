@@ -54,6 +54,7 @@
             Microsoft.Office.Tools.Ribbon.RibbonDropDownItem ribbonDropDownItemImpl18 = this.Factory.CreateRibbonDropDownItem();
             Microsoft.Office.Tools.Ribbon.RibbonDropDownItem ribbonDropDownItemImpl19 = this.Factory.CreateRibbonDropDownItem();
             Microsoft.Office.Tools.Ribbon.RibbonDropDownItem ribbonDropDownItemImpl20 = this.Factory.CreateRibbonDropDownItem();
+            Microsoft.Office.Tools.Ribbon.RibbonDialogLauncher ribbonDialogLauncherImpl1 = this.Factory.CreateRibbonDialogLauncher();
             Microsoft.Office.Tools.Ribbon.RibbonDropDownItem ribbonDropDownItemImpl21 = this.Factory.CreateRibbonDropDownItem();
             Microsoft.Office.Tools.Ribbon.RibbonDropDownItem ribbonDropDownItemImpl22 = this.Factory.CreateRibbonDropDownItem();
             Microsoft.Office.Tools.Ribbon.RibbonDropDownItem ribbonDropDownItemImpl23 = this.Factory.CreateRibbonDropDownItem();
@@ -89,7 +90,6 @@
             this.mergebooks_BeginMerge = this.Factory.CreateRibbonButton();
             this.mergesheets_BeginMerge = this.Factory.CreateRibbonButton();
             this.convert_Exchange = this.Factory.CreateRibbonButton();
-            this.convert_Spreater = this.Factory.CreateRibbonButton();
             this.convert_BeginConvert = this.Factory.CreateRibbonButton();
             this.cellActions_ConvertToValue = this.Factory.CreateRibbonButton();
             this.cellActions_ConvertToString = this.Factory.CreateRibbonButton();
@@ -100,6 +100,7 @@
             this.others_DeleteOtherSheets = this.Factory.CreateRibbonButton();
             this.LookForFirstEmptyRow = this.Factory.CreateRibbonButton();
             this.others_ClrClipboard = this.Factory.CreateRibbonButton();
+            this.others_ConvertUI = this.Factory.CreateRibbonButton();
             this.dangerzone_tryFix = this.Factory.CreateRibbonButton();
             this.help_About = this.Factory.CreateRibbonButton();
             this.tab1.SuspendLayout();
@@ -220,11 +221,13 @@
             // 
             // groupConvert
             // 
+            this.groupConvert.DialogLauncher = ribbonDialogLauncherImpl1;
             this.groupConvert.Items.Add(this.convert_sourceFormat);
             this.groupConvert.Items.Add(this.convert_targetFormat);
             this.groupConvert.Items.Add(this.buttonGroup1);
-            this.groupConvert.Label = "工作簿格式转换";
+            this.groupConvert.Label = "格式转换";
             this.groupConvert.Name = "groupConvert";
+            this.groupConvert.DialogLauncherClick += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.groupConvert_DialogLauncherClick);
             // 
             // convert_sourceFormat
             // 
@@ -277,8 +280,8 @@
             // buttonGroup1
             // 
             this.buttonGroup1.Items.Add(this.convert_Exchange);
-            this.buttonGroup1.Items.Add(this.convert_Spreater);
             this.buttonGroup1.Items.Add(this.convert_BeginConvert);
+            this.buttonGroup1.Items.Add(this.others_ConvertUI);
             this.buttonGroup1.Name = "buttonGroup1";
             // 
             // cellActions
@@ -361,12 +364,6 @@
             this.convert_Exchange.ShowImage = true;
             this.convert_Exchange.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.convert_Exchange_Click);
             // 
-            // convert_Spreater
-            // 
-            this.convert_Spreater.Enabled = false;
-            this.convert_Spreater.Label = "　 ";
-            this.convert_Spreater.Name = "convert_Spreater";
-            // 
             // convert_BeginConvert
             // 
             this.convert_BeginConvert.Label = "开始转换";
@@ -441,6 +438,12 @@
             this.others_ClrClipboard.OfficeImageId = "Clear";
             this.others_ClrClipboard.ShowImage = true;
             this.others_ClrClipboard.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.others_ClrClipboard_Click);
+            // 
+            // others_ConvertUI
+            // 
+            this.others_ConvertUI.Label = "…";
+            this.others_ConvertUI.Name = "others_ConvertUI";
+            this.others_ConvertUI.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.others_ConvertUI_Click);
             // 
             // dangerzone_tryFix
             // 
@@ -517,7 +520,6 @@
         internal Microsoft.Office.Tools.Ribbon.RibbonButton convert_BeginConvert;
         internal Microsoft.Office.Tools.Ribbon.RibbonButtonGroup buttonGroup1;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton convert_Exchange;
-        internal Microsoft.Office.Tools.Ribbon.RibbonButton convert_Spreater;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton dangerzone_tryFix;
         internal Microsoft.Office.Tools.Ribbon.RibbonGroup groupRename;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton rename_RenameWorksheets;
@@ -527,6 +529,7 @@
         internal Microsoft.Office.Tools.Ribbon.RibbonButton cellActions_ConvertToValue;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton cellActions_ConvertToString;
         internal Microsoft.Office.Tools.Ribbon.RibbonToggleButton cellActions_HighlightCurrentRC;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton others_ConvertUI;
     }
 
     partial class ThisRibbonCollection
