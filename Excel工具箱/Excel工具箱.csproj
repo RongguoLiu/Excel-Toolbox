@@ -126,6 +126,9 @@
     <Reference Include="Microsoft.Office.Interop.PowerPoint, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
+    <Reference Include="Microsoft.Office.Interop.Word, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -182,6 +185,12 @@
     can be found.
   -->
   <ItemGroup>
+    <Compile Include="AboutBox_Form.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AboutBox_Form.Designer.cs">
+      <DependentUpon>AboutBox_Form.cs</DependentUpon>
+    </Compile>
     <Compile Include="rename_Worksheets_Form.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -197,6 +206,9 @@
     <Compile Include="UniversalConvert_Form.Designer.cs">
       <DependentUpon>UniversalConvert_Form.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="AboutBox_Form.resx">
+      <DependentUpon>AboutBox_Form.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="rename_Worksheets_Form.resx">
       <DependentUpon>rename_Worksheets_Form.cs</DependentUpon>
     </EmbeddedResource>
@@ -234,6 +246,7 @@
       <SubType>Code</SubType>
     </Compile>
     <None Include="README.md" />
+    <None Include="Resources\使用说明.xlsx" />
     <None Include="ThisAddIn.Designer.xml">
       <DependentUpon>ThisAddIn.cs</DependentUpon>
     </None>
